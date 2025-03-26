@@ -1,4 +1,4 @@
-package sockets;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -21,7 +21,20 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 
    public GUI(){
+	// define varous elements
+	JLabel output = new JLabel("output:");
+	//JLabel messageLabel = new JLabel("label(message?");
+	JLabel write = new JLabel("input here : ");
+	JButton b=new JButton("Click Here");  
 
+	// add elements to the frame
+	f.add(output);
+	//f.add(messageLabel);
+	f.add(b);  
+	f.add(write);
+	f.setSize(1500,500);  
+	f.setLayout(new GridLayout(4, 1));  
+	f.setVisible(true);
 
 	   /*
 	   //JPanel title =new JPanel(new GridLayout());
@@ -44,18 +57,31 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     	// game.initialize();
     	*/
         
-	    JButton b=new JButton("Click Here");  
+	   
 		b.addMouseListener(this);
-	    JLabel output = new JLabel("output:");
-		//JLabel messageLabel = new JLabel("label(message?");
-        JLabel inputArea = new JLabel("input here : ");
-		f.add(output);
-		//f.add(messageLabel);
-	    f.add(b);  
-        f.add(inputArea);
-	    f.setSize(1500,500);  
-	    f.setLayout(new GridLayout(4, 1));  
-	    f.setVisible(true);
+
+		/* 
+		write.addKeyListener(new KeyListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("button clicked");
+			}
+
+			public void keyPressed(KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					System.out.println("enter pressed");
+					output(getName());
+				}
+				
+			}
+
+
+		});
+	    
+		*/
 		System.out.print("Gui displayed");
 		revalidate();
 	   repaint();

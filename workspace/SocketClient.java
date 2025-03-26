@@ -1,4 +1,3 @@
-package sockets;
 
 
 import java.awt.FlowLayout;
@@ -48,8 +47,8 @@ public class SocketClient {
         }
         public void run() {
         	try {
-				ObjectOutputStream out = (ObjectOutputStream) server.getOutputStream();
-				//out.writeObject("hello server");
+				final ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());;
+				out.writeObject("hello server");
 			} catch (IOException e) {
 				// prints to console
 				System.out.println("error in thread handling sending");
@@ -66,7 +65,7 @@ public class SocketClient {
         }
         public void run() {
         	try {
-				ObjectInputStream in = (ObjectInputStream) server.getInputStream();
+				final ObjectInputStream in =new ObjectInputStream(server.getInputStream());
 				//int recieve= in.readObject();
 				String message="no message";
 				//try {
@@ -99,7 +98,7 @@ public class SocketClient {
         Socket socket = null;
         ObjectOutputStream oos = null;
         ObjectInputStream ois = null;
-        GUI display= t.new GUI();
+        GUI display= new GUI();
        
         
         socket = new Socket(host.getHostName(), 9876);
@@ -116,12 +115,16 @@ public class SocketClient {
             rh.start();
             wh.start();
             //write to socket using ObjectOutputStream
-            oos = new ObjectOutputStream(socket.getOutputStream());
+            
+            //ois = new ObjectInputStream(socket.getInputStream());
+            //oos = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("Sending request to Socket Server");
+            //oos = new ObjectOutputStream(socket.getOutputStream());
             System.out.println("Sending request to Socket Server");
             if(i==4)oos.writeObject("exit");
             else oos.writeObject(""+i);
             //read the server response message
-            ois = new ObjectInputStream(socket.getInputStream());
+            
             String message = (String) ois.readObject();
             System.out.println("Message: " + message);
             //close resources
