@@ -1,6 +1,6 @@
 package sockets;
 
-import sockets.SocketClient;
+
 public class Main {
 
 
@@ -8,6 +8,8 @@ public class Main {
     
         ChatServerWithThreads server= new ChatServerWithThreads();
         SocketClient client = new SocketClient();
+        GUI display = new GUI();
+        client.start();
     }
     
 

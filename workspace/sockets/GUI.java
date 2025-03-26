@@ -45,6 +45,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
     	*/
         
 	    JButton b=new JButton("Click Here");  
+		b.addMouseListener(this);
 	    JLabel output = new JLabel("output:");
 		//JLabel messageLabel = new JLabel("label(message?");
         JLabel inputArea = new JLabel("input here : ");
@@ -97,7 +98,7 @@ public void mouseMoved(MouseEvent e) {
 @Override
 public void mouseClicked(MouseEvent e) {
 	// TODO Auto-generated method stub
-
+	
 	
 }
 

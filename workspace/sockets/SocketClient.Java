@@ -24,7 +24,8 @@ import javax.swing.JPanel;
 
 public class SocketClient {
 	
-	
+	//Thread wh=new SendHandler(socket);
+    //Thread rh=new RecieveHandler(socket);
 	/*
 	 * Modify this example so that it opens a dialogue window using java swing, 
 	 * takes in a user message and sends it
