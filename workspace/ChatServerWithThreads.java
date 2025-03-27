@@ -85,7 +85,7 @@ public class ChatServerWithThreads {
 
 		public void run() {
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
-            while(true) {
+            while(client.isConnected()) {
 	            try {
 	            	//code to send messages
 	            	//String message = (String) in.readObject();
@@ -93,7 +93,7 @@ public class ChatServerWithThreads {
 	            	input = (String)in.readObject();
 	            
 	            	if(input!=null) {
-	            		System.out.println(input);
+	            		System.out.println("server recieved"+input);
 	            		for(ConnectionHandler c :connections) {
 	            			synchronized(c){
 	            				c.send(input);
