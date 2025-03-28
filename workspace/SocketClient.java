@@ -21,11 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 
-
+// creates a socket to send and recieve mesages to and from a server
 public class SocketClient {
-	
-	//Thread wh=new SendHandler(socket);
-    //Thread rh=new RecieveHandler(socket);
+
     static GUI display=new GUI();
 	static ObjectOutputStream outs =null;
 	static ObjectInputStream ins =null;
@@ -80,12 +78,14 @@ public class SocketClient {
 		*/
 
 	
-//creates a thread to handle recieveing messages
+// thread to handle recieveing messages
 	private static class RecieveHandler extends Thread {
         Socket server;
+		//constructor
         RecieveHandler(Socket socket) {
             server = socket;
         }
+		// runnig the thread checks for a message until the connection is closed
         public void run() {
 			
         	try {
@@ -113,7 +113,9 @@ public class SocketClient {
         }
 	}
 	
-    //copied all of gui into this file because it woudl work better
+    //GUi class to create a window to send and recieve messages
+	//uses a dialog to send messages
+	// and a label to display messages
     private static class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
 
 
@@ -145,6 +147,7 @@ public class SocketClient {
 		b.addMouseListener(this);
 
 		/* 
+		//alternate code for using enter to send messages
 		write.addKeyListener(new KeyListener(){
 
 			@Override
@@ -167,7 +170,8 @@ public class SocketClient {
 	    
 		*/
 		
-        System.out.print("Gui displayed");
+        //System.out.print("Gui displayed");
+		//updates the gui
 		revalidate();
 	   repaint();
 	   
@@ -199,6 +203,7 @@ public void mouseMoved(MouseEvent e) {
 	
 }
 @Override
+//creates a dialog to send a message when the button is clicked
 public void mouseClicked(MouseEvent e) {
 	
 	// gets a message from the user by craeting a dialog
