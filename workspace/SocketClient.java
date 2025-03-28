@@ -27,6 +27,10 @@ public class SocketClient {
 	//Thread wh=new SendHandler(socket);
     //Thread rh=new RecieveHandler(socket);
     static GUI display=new GUI();
+	static ObjectOutputStream outs =null;
+	static ObjectInputStream ins =null;
+	//private static boolean sending=false;
+	private static String message=null;
 	/*
 	 * Modify this example so that it opens a dialogue window using java swing, 
 	 * takes in a user message and sends it
@@ -42,6 +46,9 @@ public class SocketClient {
 	*/
 
 	//creates a thread to send messages
+	// this thread is unnecessary so commented out
+
+	/* 
 	private static class SendHandler extends Thread {
         Socket server;
         SendHandler(Socket socket) {
@@ -50,23 +57,28 @@ public class SocketClient {
 
         public void run() {
         	try {
-				final ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());;
-				out.writeObject("hello server");
+				final ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
 
+				message="hello server";
+					while(true){
+						
+					
+						System.out.println("reached sending=true"+sending);
+
+						System.out.println("sending message"+message);
+						out.writeObject(message);
+		
+						}
+					}			
+				
 			} catch (IOException e) {
 				// prints to console
 				System.out.println("error in thread handling sending");
 			}
         }
-        public void send(String message) {
-        	try {
-                //display.send(message);
-            }catch (Exception e) {
-            	System.out.println("error sending message");
-            	e.printStackTrace();
-            }
-	}
-}
+
+		*/
+
 	
 //creates a thread to handle recieveing messages
 	private static class RecieveHandler extends Thread {
@@ -75,8 +87,10 @@ public class SocketClient {
             server = socket;
         }
         public void run() {
+			
         	try {
-				final ObjectInputStream in =new ObjectInputStream(server.getInputStream());
+				while(true){
+				final ObjectInputStream in =ins;
 				//int recieve= in.readObject();
 				String message=null;
 				try {
@@ -86,10 +100,11 @@ public class SocketClient {
                     }
 				} catch (ClassNotFoundException e) {
 					// there could just not 
-					//e.printStackTrace();
-					System.out.println("cant read server message");
+					e.printStackTrace();
+					System.out.println("error reading server message");
 				}
 	            //System.out.println("Message: " + message);
+			}
 			} catch (IOException e) {
 				// prints to console
 				System.out.println("error in thread handling sending:");
@@ -109,8 +124,7 @@ public class SocketClient {
     //String input="";
     //String output=null;
 	JLabel input = new JLabel("message from server:");
-	//JLabel output = new JLabel("input here : ");
-	// i used dialog to send message instead of jlabel
+
    public GUI(){
 	// define varous elements
 	
@@ -161,16 +175,13 @@ public class SocketClient {
 	}
    
 	// reads a message from the server
-   public String read(String message){
-    String s="";
-    input.setText(message);
+   public String read(String s){
+
+    input.setText("message from server:"+ s);
     return s;
 
    }
-//sends a message to the server
-   public void output(String message){
-	
-   }
+
 
    public void update(){
     //output(getName());
@@ -190,10 +201,21 @@ public void mouseMoved(MouseEvent e) {
 @Override
 public void mouseClicked(MouseEvent e) {
 	
-	// reads and sends a message to the server
+	// gets a message from the user by craeting a dialog
+	
 	String input = JOptionPane.showInputDialog(null, "type your message and press ok to send");
+	message=input;
+	// then tells the thread handling sending to send the message
+	//System.out.println("sending message"+message);
+	try {
+	outs.writeObject(message);
+	} catch (Exception ex) {
+	// TODO: handle exception
+	System.out.println("error sending message");
+	ex.printStackTrace();
+}
 	//System.out.println(input);
-	output(input);
+	//rh.send(input);
 	
 }
 @Override
@@ -228,9 +250,7 @@ public void actionPerformed(ActionEvent e) {
 }//end gui
 	
 	
-	/*
 	
-	*/
 	
 
     public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException{
@@ -244,19 +264,19 @@ public void actionPerformed(ActionEvent e) {
        
         //display= new GUI();
         socket = new Socket(host.getHostName(), 9876);
-        ObjectInputStream ins= new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream outs = new ObjectOutputStream(socket.getOutputStream());
-        outs.writeObject("hello from the client side");
+        ins= new ObjectInputStream(socket.getInputStream());
+        outs = new ObjectOutputStream(socket.getOutputStream());
+        //outs.writeObject("hello from the client side");
         
         //System.out.println((String) ins.readObject());
         
         //for(int i=0; i<5;i++){
             //establish socket connection to server
             socket = new Socket(host.getHostName(), 9876);
-            Thread wh=new SendHandler(socket);
+            //Thread wh=new SendHandler(socket);
             Thread rh=new RecieveHandler(socket);
             rh.start();
-            wh.start();
+            //wh.start();
             //write to socket using ObjectOutputStream
             //commented out code to test that connection is working
             /* 

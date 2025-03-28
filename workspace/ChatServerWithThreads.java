@@ -93,9 +93,10 @@ public class ChatServerWithThreads {
 	            	input = (String)in.readObject();
 	            
 	            	if(input!=null) {
-	            		System.out.println("server recieved"+input);
+	            		//System.out.println("server recieved"+input);
 	            		for(ConnectionHandler c :connections) {
 	            			synchronized(c){
+                                System.out.println("sending"+input);
 	            				c.send(input);
 	            			}
 	            		}
