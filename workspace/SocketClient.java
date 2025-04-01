@@ -215,7 +215,7 @@ public void mouseClicked(MouseEvent e) {
 	try {
 	outs.writeObject(message);
 	} catch (Exception ex) {
-	// TODO: handle exception
+	// exeption handled here
 	System.out.println("error sending message");
 	ex.printStackTrace();
 }
@@ -302,7 +302,10 @@ public void actionPerformed(ActionEvent e) {
             */
             while(true){
                 display.update();
+				if(rh.isAlive()==false){
+					socket.close();
             }
+			}
             //Thread.sleep(100);
        // } end of for loop for testing
         
