@@ -18,12 +18,12 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
     
-    private final int B_WIDTH = 300;
-    private final int B_HEIGHT = 300;
-    private final int DOT_SIZE = 10;
+    private final int B_WIDTH = 700;//changed to 700 from smaller 300
+    private final int B_HEIGHT = 700;//changed to 700 from smaller 300
+    private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
-    private final int RAND_POS = 29;
-    private final int DELAY = 140;
+    private final int RAND_POS = 14;
+    private final int DELAY = 200;//changed to slow down from 140
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -69,6 +69,17 @@ public class Board extends JPanel implements ActionListener {
 
         ImageIcon iih = new ImageIcon("workspace/snake_green_head_64.png");
         head = iih.getImage();
+        //duplicate code for player 2 snake
+        ImageIcon iid2 = new ImageIcon("workspace/snake_yellow_blob_64.png");
+        ball = iid.getImage();
+        
+        //ImageIcon iia = new ImageIcon("workspace/apple_red_64.png");
+        //apple = iia.getImage();
+
+        ImageIcon iih2 = new ImageIcon("workspace/snake_yellow_head_64.png");
+        head = iih.getImage();
+
+
     }
 
     private void initGame() {
@@ -118,7 +129,7 @@ public class Board extends JPanel implements ActionListener {
     private void gameOver(Graphics g) {
         
         String msg = "Game Over";
-        Font small = new Font("Helvetica", Font.BOLD, 14);
+        Font small = new Font("Helvetica", Font.BOLD, 24);//increased font size
         FontMetrics metr = getFontMetrics(small);
 
         g.setColor(Color.white);
@@ -196,6 +207,7 @@ public class Board extends JPanel implements ActionListener {
 
         r = (int) (Math.random() * RAND_POS);
         apple_y = ((r * DOT_SIZE));
+
     }
 
     @Override
@@ -241,6 +253,33 @@ public class Board extends JPanel implements ActionListener {
                 rightDirection = false;
                 leftDirection = false;
             }
+
+            //added wasd
+            if ((key == KeyEvent.VK_A) && (!rightDirection)) {
+                leftDirection = true;
+                upDirection = false;
+                downDirection = false;
+            }
+
+            if ((key == KeyEvent.VK_D) && (!leftDirection)) {
+                rightDirection = true;
+                upDirection = false;
+                downDirection = false;
+            }
+
+            if ((key == KeyEvent.VK_W) && (!downDirection)) {
+                upDirection = true;
+                rightDirection = false;
+                leftDirection = false;
+            }
+
+            if ((key == KeyEvent.VK_S) && (!upDirection)) {
+                downDirection = true;
+                rightDirection = false;
+                leftDirection = false;
+            }
+
+
         }
     }
 }

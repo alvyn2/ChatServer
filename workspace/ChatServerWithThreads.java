@@ -4,7 +4,8 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
-
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 /**
  * This program is a server that takes connection requests on
  * the port specified by the constant LISTENING_PORT.  When a
@@ -20,20 +21,20 @@ public class ChatServerWithThreads {
 //9876 default
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
-    
+    JPanel board = new Board();
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
 
         /* Accept and process connections forever, or until some error occurs. */
-
+        
         try {
 
             // Accept next connection request and handle it.
             listener = new ServerSocket(LISTENING_PORT);
             System.out.println("Listening on port " + LISTENING_PORT);
             while (true) {
-            	//create a socket to form connection and create a thread o handle the socket
+            	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
             	ConnectionHandler cH=new ConnectionHandler(s);
             	cH.start();
@@ -87,6 +88,7 @@ public class ChatServerWithThreads {
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
+                    //send(new Snake());
 	            	//code to send messages
 	            	//String message = (String) in.readObject();
 	            	String input=null;
