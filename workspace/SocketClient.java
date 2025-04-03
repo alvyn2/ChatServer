@@ -32,12 +32,6 @@ public class SocketClient {
 	//private static boolean sending=false;
 	private static String message=null;
 	/*
-	 * Modify this example so that it opens a dialogue window using java swing, 
-	 * takes in a user message and sends it
-	 * to the server. 
-	 * The server should output the message back to all connected clients
-	 * (you should see your own message pop up in your client as well when you send it!).
-	 * 
 	 *  We will build on this project in the future to make a full fledged server based game,
 	 *  so make sure you can read your code later! Use good programming practices.
 	 *  
@@ -46,8 +40,8 @@ public class SocketClient {
 	*/
 
 	//creates a thread to send messages
-	// this thread is unnecessary so commented out
 
+// no need for a thread to send messages because messages are sent when the user does actions such as clikicng the mouse or pressing a key
 	/* 
 	private static class SendHandler extends Thread {
         Socket server;
@@ -91,8 +85,9 @@ public class SocketClient {
         public void run() {
 			
         	try {
-				while(true){
 				final ObjectInputStream in =ins;
+				while(server.isConnected()){
+				
 				//int recieve= in.readObject();
 				String message=null;
 				try {
@@ -101,7 +96,7 @@ public class SocketClient {
                     	display.read(message);
                     }
 				} catch (ClassNotFoundException e) {
-					// there could just not 
+					// handles the exception
 					e.printStackTrace();
 					System.out.println("error reading server message");
 				}
@@ -148,7 +143,7 @@ public class SocketClient {
 	   //button to send messages
 		b.addMouseListener(this);
 
-		/
+		
 		//alternate code for using enter to send messages
 		
 
@@ -179,20 +174,75 @@ public class SocketClient {
    }
 //key event functions
 @Override
-public void keyReleased(ActionEvent e) {
-	// TODO Auto-generated method stub
-	System.out.println("button clicked");
-}
-
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
-	if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-		System.out.println("enter pressed");
-		output(getName());
+	if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
+		System.out.println("up key pressed");
+		
+		try {
+			outs.writeObject(e);	
+			System.out.println("sending keyevent");
+		} catch (Exception ex) {
+			// TODO: handle exception
+			ex.printStackTrace();
+			System.out.println("error sending keyevent");
+		}
+		
 	}
+
+	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
+		System.out.println("left pressed");
+		
+		try {
+			outs.writeObject(e);	
+			System.out.println("sending keyevent");
+		} catch (Exception ex) {
+			// TODO: handle exception
+			ex.printStackTrace();
+			System.out.println("error sending keyevent");
+		}
+		
+	}
+
+
+	if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
+		System.out.println(" right pressed");
+		
+		try {
+			outs.writeObject(e);	
+			System.out.println("sending keyevent");
+		} catch (Exception ex) {
+			// TODO: handle exception
+			ex.printStackTrace();
+			System.out.println("error sending keyevent");
+		}
+		
+	}
+
+	if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
+		System.out.println("up key pressed");
+		try {
+			outs.writeObject(e);	
+			System.out.println("sending keyevent");
+		} catch (Exception ex) {
+			// TODO: handle exception
+			ex.printStackTrace();
+			System.out.println("error sending keyevent");
+		}
+	}
+}
+
+@Override
+public void keyTyped(KeyEvent e) {
+	// TODO Auto-generated method stub
 	
 }
 
+@Override
+public void keyReleased(KeyEvent e ){
+	// TODO Auto-generated method stub
+	
+}
 
   //mouse event functions 
 @Override
@@ -269,21 +319,21 @@ public void actionPerformed(ActionEvent e) {
         //ObjectOutputStream oos = null;
         //ObjectInputStream ois = null;
         //establish socket connection to server
-       
-        //display= new GUI();
         socket = new Socket(host.getHostName(), 9876);
         ins= new ObjectInputStream(socket.getInputStream());
         outs = new ObjectOutputStream(socket.getOutputStream());
+		System.out.println("sucessfully connected to server");
         //outs.writeObject("hello from the client side");
         
         //System.out.println((String) ins.readObject());
-        
+        Thread rh=new RecieveHandler(socket);
+            rh.start();
+
         //for(int i=0; i<5;i++){
             //establish socket connection to server
-            socket = new Socket(host.getHostName(), 9876);
+            //socket = new Socket(host.getHostName(), 9876);
             //Thread wh=new SendHandler(socket);
-            Thread rh=new RecieveHandler(socket);
-            rh.start();
+            
             //wh.start();
             //write to socket using ObjectOutputStream
             //commented out code to test that connection is working
@@ -305,9 +355,6 @@ public void actionPerformed(ActionEvent e) {
             */
             while(true){
                 display.update();
-				if(rh.isAlive()==false){
-					socket.close();
-            }
 			}
             //Thread.sleep(100);
        // } end of for loop for testing

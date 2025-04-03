@@ -268,6 +268,12 @@ public class Board extends JPanel implements ActionListener {
 
     }
 
+    public void importkeyEvent(KeyEvent e){
+        
+
+
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
 

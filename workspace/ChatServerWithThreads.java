@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.awt.event.KeyEvent;
 /**
  * This program is a server that takes connection requests on
  * the port specified by the constant LISTENING_PORT.  When a
@@ -21,7 +22,8 @@ public class ChatServerWithThreads {
 //9876 default
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
-    JPanel board = new Board();
+   // JPanel board = new Board();
+    static JFrame snake = new Snake();
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
@@ -75,9 +77,9 @@ public class ChatServerWithThreads {
             }
             }
         //sends messages
-        public synchronized void send(String input) {
+        public synchronized void send(Object output) {
         	try {
-        		out.writeObject(input);
+        		out.writeObject(output);
         	}catch(IOException e) {
         		System.out.println("error sending message");
         		e.printStackTrace();
@@ -85,21 +87,22 @@ public class ChatServerWithThreads {
         }
 
 		public void run() {
-            String clientAddress = client.getInetAddress().toString();// only for debugging purposes
+            //String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
-                    //send(new Snake());
+                  
 	            	//code to send messages
 	            	//String message = (String) in.readObject();
-	            	String input=null;
-	            	input = (String)in.readObject();
-	            
+	            	Object input=null;
+	            	input = (KeyEvent) in.readObject();
+                    snake.
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
 	            		for(ConnectionHandler c :connections) {
 	            			synchronized(c){
-                                System.out.println("sending"+input);
-	            				c.send(input);
+                                //System.out.println("sending"+input);
+                                //sending a JFrame
+	            				c.send(snake);
 	            			}
 	            		}
 	            	}
