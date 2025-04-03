@@ -4,9 +4,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -116,7 +118,7 @@ public class SocketClient {
     //GUi class to create a window to send and recieve messages
 	//uses a dialog to send messages
 	// and a label to display messages
-    private static class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
+    private static class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener,KeyListener{
 
 
 
@@ -146,29 +148,12 @@ public class SocketClient {
 	   //button to send messages
 		b.addMouseListener(this);
 
-		/* 
+		/
 		//alternate code for using enter to send messages
-		write.addKeyListener(new KeyListener(){
+		
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				System.out.println("button clicked");
-			}
-
-			public void keyPressed(KeyEvent e) {
-				// TODO Auto-generated method stub
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					System.out.println("enter pressed");
-					output(getName());
-				}
-				
-			}
-
-
-		});
 	    
-		*/
+		
 		
         //System.out.print("Gui displayed");
 		//updates the gui
@@ -192,6 +177,24 @@ public class SocketClient {
     revalidate();
     repaint();
    }
+//key event functions
+@Override
+public void keyReleased(ActionEvent e) {
+	// TODO Auto-generated method stub
+	System.out.println("button clicked");
+}
+
+public void keyPressed(KeyEvent e) {
+	// TODO Auto-generated method stub
+	if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+		System.out.println("enter pressed");
+		output(getName());
+	}
+	
+}
+
+
+  //mouse event functions 
 @Override
 public void mouseDragged(MouseEvent e) {
 	// TODO Auto-generated method stub

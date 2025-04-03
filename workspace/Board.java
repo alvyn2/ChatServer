@@ -27,8 +27,12 @@ public class Board extends JPanel implements ActionListener {
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
+    //duplicated variables for player 2 snake
+    private final int x2[] = new int[ALL_DOTS];
+    private final int y2[] = new int[ALL_DOTS];
 
     private int dots;
+    private int dots2;//duplicated variable for player 2 snake
     private int apple_x;
     private int apple_y;
 
@@ -42,6 +46,9 @@ public class Board extends JPanel implements ActionListener {
     private Image ball;
     private Image apple;
     private Image head;
+    //duplicated variables for player 2 snake
+    private Image head2;
+    private Image ball2;
 
     public Board() {
         
@@ -71,13 +78,14 @@ public class Board extends JPanel implements ActionListener {
         head = iih.getImage();
         //duplicate code for player 2 snake
         ImageIcon iid2 = new ImageIcon("workspace/snake_yellow_blob_64.png");
-        ball = iid.getImage();
-        
-        //ImageIcon iia = new ImageIcon("workspace/apple_red_64.png");
+        ball2 = iid2.getImage();
+
+        //code for extra apple
+        //ImageIcon iia = new ImageIcon("workspace/apple_green_64.png");
         //apple = iia.getImage();
 
         ImageIcon iih2 = new ImageIcon("workspace/snake_yellow_head_64.png");
-        head = iih.getImage();
+        head2 = iih2.getImage();
 
 
     }
@@ -85,6 +93,13 @@ public class Board extends JPanel implements ActionListener {
     private void initGame() {
 
         dots = 3;
+        dots2=3;
+        
+        //duplicated code for player 2 snake
+        for (int z = 0; z < dots2; z++) {
+            x2[z] = 50 - z * 10;
+            y2[z] = 50;
+        }
 
         for (int z = 0; z < dots; z++) {
             x[z] = 50 - z * 10;
@@ -117,6 +132,14 @@ public class Board extends JPanel implements ActionListener {
                     g.drawImage(ball, x[z], y[z], this);
                 }
             }
+            //duplicate code for player 2 snake
+            for (int z = 0; z < dots2; z++) {
+                if (z == 0) {
+                    g.drawImage(head2, x2[z], y2[z], this);
+                } else {
+                    g.drawImage(ball2, x2[z], y2[z], this);
+                }
+            }
 
             Toolkit.getDefaultToolkit().sync();
 
@@ -135,6 +158,13 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
+        String win="tie?";
+        if(dots>dots2){
+            win="Player 1 wins!";
+        }else if(dots2>dots){
+            win="Player 2 wins!";
+        }
+        g.drawString(win, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 4);
     }
 
     private void checkApple() {
@@ -144,10 +174,16 @@ public class Board extends JPanel implements ActionListener {
             dots++;
             locateApple();
         }
+        //duplicated variables for player 2 snake
+        if ((x2[0] == apple_x) && (y2[0] == apple_y)) {
+
+            dots2++;
+            locateApple();
+        }
     }
 
-    private void move() {
-
+    private void move(int player) {
+        if(player==1){
         for (int z = dots; z > 0; z--) {
             x[z] = x[(z - 1)];
             y[z] = y[(z - 1)];
@@ -168,6 +204,28 @@ public class Board extends JPanel implements ActionListener {
         if (downDirection) {
             y[0] += DOT_SIZE;
         }
+        }else if(player==2){//duplicated code for player 2 snake
+            for (int z = dots2; z > 0; z--) {
+                x2[z] = x2[(z - 1)];
+                y2[z] = y2[(z - 1)];
+            }
+    
+            if (leftDirection) {
+                x2[0] -= DOT_SIZE;
+            }
+    
+            if (rightDirection) {
+                x2[0] += DOT_SIZE;
+            }
+    
+            if (upDirection) {
+                y2[0] -= DOT_SIZE;
+            }
+    
+            if (downDirection) {
+                y2[0] += DOT_SIZE;
+            }
+            }
     }
 
     private void checkCollision() {
@@ -217,7 +275,7 @@ public class Board extends JPanel implements ActionListener {
 
             checkApple();
             checkCollision();
-            move();
+            move(1);
         }
 
         repaint();
