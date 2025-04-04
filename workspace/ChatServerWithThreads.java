@@ -23,11 +23,11 @@ public class ChatServerWithThreads {
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
    // JPanel board = new Board();
-    static JFrame snake = new Snake();
+    static Snake snake = new Snake();
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
-
+        int idIterator=1;
         /* Accept and process connections forever, or until some error occurs. */
         
         try {
@@ -38,7 +38,8 @@ public class ChatServerWithThreads {
             while (true) {
             	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
-            	ConnectionHandler cH=new ConnectionHandler(s);
+            	ConnectionHandler cH=new ConnectionHandler(s,idIterator);
+                idIterator++;
             	cH.start();
             	connections.add(cH);
             }
@@ -61,10 +62,12 @@ public class ChatServerWithThreads {
         private Socket client;
         private ObjectOutputStream out;
         private ObjectInputStream in;
+        private int id;
         
         //ObjectInputStream in;
-        ConnectionHandler(Socket socket) {
+        ConnectionHandler(Socket socket,int i) {
             client = socket;
+            id=i;
             try {
             	//code to create input and output stream
             	out = new ObjectOutputStream(client.getOutputStream());
@@ -95,10 +98,14 @@ public class ChatServerWithThreads {
 	            	//String message = (String) in.readObject();
 	            	Object input=null;
 	            	input = (KeyEvent) in.readObject();
-                    snake.
+                    
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
-	            		for(ConnectionHandler c :connections) {
+	            		if(input instanceof KeyEvent) {
+                            snake.board.importkeyEvent((KeyEvent)input,id);
+                        }
+                        
+                        for(ConnectionHandler c :connections) {
 	            			synchronized(c){
                                 //System.out.println("sending"+input);
                                 //sending a JFrame

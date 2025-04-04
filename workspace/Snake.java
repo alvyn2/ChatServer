@@ -5,17 +5,18 @@
 
     import java.awt.EventQueue;
     import javax.swing.JFrame;
+    import javax.swing.JPanel;
     //
     public class Snake extends JFrame {
-    
+        public Board board;
         public Snake() {
             
             initUI();
         }
         
         private void initUI() {
-            
-            add(new Board());
+            board = new Board();
+            add(board);
             
             setResizable(false);
             pack();
@@ -23,6 +24,12 @@
             setTitle("Snake");
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
+
+
+
+        public Board getBoard() {
+            return board;
         }
         
         public static void main(String[] args) {

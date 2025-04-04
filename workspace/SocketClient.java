@@ -77,6 +77,7 @@ public class SocketClient {
 // thread to handle recieveing messages
 	private static class RecieveHandler extends Thread {
         Socket server;
+		JFrame gameboardFrame=null;
 		//constructor
         RecieveHandler(Socket socket) {
             server = socket;
@@ -89,11 +90,11 @@ public class SocketClient {
 				while(server.isConnected()){
 				
 				//int recieve= in.readObject();
-				String message=null;
+				JFrame serverMessage=null;
 				try {
-					message = (String) in.readObject();
-                    if(message!=null) {
-                    	display.read(message);
+					serverMessage = (JFrame) in.readObject();
+                    if(serverMessage!=null) {
+                    	display.read(serverMessage);
                     }
 				} catch (ClassNotFoundException e) {
 					// handles the exception
@@ -104,7 +105,8 @@ public class SocketClient {
 			}
 			} catch (IOException e) {
 				// prints to console
-				System.out.println("error in thread handling sending:");
+				System.out.println("error in thread handling recieving:");
+				System.out.println(serverMessage.toString());
 				e.printStackTrace();
 			}
         }
@@ -119,36 +121,31 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    JFrame f=new JFrame("simple gui");  
+    //JFrame f=new JFrame("simple client gui");  
+	JFrame gameboard=null;
     //String input="";
     //String output=null;
-	JLabel input = new JLabel("message from server:");
+	//JLabel input = new JLabel("message from server:");
 
    public GUI(){
 	// define varous elements
 	
 	//JLabel messageLabel = new JLabel("label(message?");
 	
-	JButton b=new JButton("Click Here to send a message");  
-
+	//JButton b=new JButton("Click Here to send a message");  
+	/* 
 	// add elements to the frame
 	//f.add(output);
 	//f.add(messageLabel);
-	f.add(b);  
-	f.add(input);
-	f.setSize(1500,500);  
-	f.setLayout(new GridLayout(4, 1));  
+	//f.add(b);  
+	//f.add(input);
+	f.setSize(1000,500);  
+	f.setLayout(new GridLayout());  
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	*/
 	   //button to send messages
-		b.addMouseListener(this);
-
-		
-		//alternate code for using enter to send messages
-		
-
-	    
-		
+		//b.addMouseListener(this);
 		
         //System.out.print("Gui displayed");
 		//updates the gui
@@ -159,12 +156,13 @@ public class SocketClient {
 	}
    
 	// reads a message from the server
-   public String read(String s){
+   public void read(JFrame g){
 
-    input.setText("message from server:"+ s);
-    return s;
-
-   }
+    //input.setText("message from server:"+ s);
+	gameboard=g;
+	g.setVisible(true);
+	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
 
 
    public void update(){
