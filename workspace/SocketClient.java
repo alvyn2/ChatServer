@@ -106,7 +106,7 @@ public class SocketClient {
 			} catch (IOException e) {
 				// prints to console
 				System.out.println("error in thread handling recieving:");
-				System.out.println(serverMessage.toString());
+				System.out.println(gameboardFrame.toString());
 				e.printStackTrace();
 			}
         }
