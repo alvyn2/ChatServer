@@ -104,7 +104,7 @@ public class Board extends JPanel implements ActionListener {
 
         dots = 3;
         dots2=3;
-        
+        //reset to default values
         //duplicated code for player 2 snake
         for (int z = 0; z < dots2; z++) {
             x2[z] = 50 - z * 10;
@@ -468,6 +468,24 @@ public class Board extends JPanel implements ActionListener {
                 downDirection2 = true;
                 rightDirection2 = false;
                 leftDirection2 = false;
+            }
+
+
+
+            //press space to restart
+            if (key == KeyEvent.VK_SPACE) {
+                inGame = true;
+                 leftDirection = false;
+                 rightDirection = true;
+                upDirection = false;
+                downDirection = false;
+    //duplicated variables for player 2 snake
+                 leftDirection2 = false;
+                rightDirection2 = true;
+                upDirection2 = false;
+               downDirection2 = false;
+
+                initGame();
             }
 
 
