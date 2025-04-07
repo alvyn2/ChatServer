@@ -375,7 +375,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     //wasd is for player 2
-    if ((key == KeyEvent.VK_A) && (!rightDirection)) {
+            if ((key == KeyEvent.VK_A) && (!rightDirection)) {
                 leftDirection2 = true;
                 upDirection2 = false;
                 downDirection2 = false;

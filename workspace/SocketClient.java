@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.KeyEvent;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -77,7 +78,7 @@ public class SocketClient {
 // thread to handle recieveing messages
 	private static class RecieveHandler extends Thread {
         Socket server;
-		JFrame gameboardFrame=null;
+		//JFrame gameboardFrame=null;
 		//constructor
         RecieveHandler(Socket socket) {
             server = socket;
@@ -90,12 +91,13 @@ public class SocketClient {
 				while(server.isConnected()){
 				
 				//int recieve= in.readObject();
-				JFrame serverMessage=null;
+				Board serverMessage=null;
 				try {
-					serverMessage = (JFrame) in.readObject();
+					serverMessage =(Board) in.readObject();
                     if(serverMessage!=null) {
                     	display.read(serverMessage);
-                    }
+								
+					}
 				} catch (ClassNotFoundException e) {
 					// handles the exception
 					e.printStackTrace();
@@ -106,8 +108,12 @@ public class SocketClient {
 			} catch (IOException e) {
 				// prints to console
 				System.out.println("error in thread handling recieving:");
-				System.out.println(gameboardFrame.toString());
-				e.printStackTrace();
+				
+				if(e instanceof EOFException) {
+                        System.out.println("Server disconnected: " );
+                    } else {
+                        e.printStackTrace();
+                    }
 			}
         }
 	}
@@ -121,8 +127,8 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    //JFrame f=new JFrame("simple client gui");  
-	JFrame gameboard=null;
+    JFrame f=new JFrame("simple client gui");  
+	JPanel game=new JPanel();
     //String input="";
     //String output=null;
 	//JLabel input = new JLabel("message from server:");
@@ -131,7 +137,7 @@ public class SocketClient {
 	// define varous elements
 	
 	//JLabel messageLabel = new JLabel("label(message?");
-	
+
 	//JButton b=new JButton("Click Here to send a message");  
 	/* 
 	// add elements to the frame
@@ -139,16 +145,18 @@ public class SocketClient {
 	//f.add(messageLabel);
 	//f.add(b);  
 	//f.add(input);
+	 */
 	f.setSize(1000,500);  
 	f.setLayout(new GridLayout());  
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	*/
+	
 	   //button to send messages
 		//b.addMouseListener(this);
 		
         //System.out.print("Gui displayed");
 		//updates the gui
+		f.addKeyListener(this);
 		revalidate();
 	   repaint();
 	   
@@ -156,11 +164,13 @@ public class SocketClient {
 	}
    
 	// reads a message from the server
-   public void read(JFrame g){
+   public void read(Board g){
 
+	f.remove(game);
+	game=g;
+	f.add(game);
     //input.setText("message from server:"+ s);
-	gameboard=g;
-	g.setVisible(true);
+	System.out.println("game displayed");
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 

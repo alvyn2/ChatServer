@@ -26,12 +26,6 @@
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
 
-
-
-        public Board getBoard() {
-            return board;
-        }
-        
         public static void main(String[] args) {
             
             EventQueue.invokeLater(() -> {

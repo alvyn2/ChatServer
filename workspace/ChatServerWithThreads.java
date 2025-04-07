@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.event.KeyEvent;
+import java.awt.EventQueue;
 /**
  * This program is a server that takes connection requests on
  * the port specified by the constant LISTENING_PORT.  When a
@@ -23,7 +24,7 @@ public class ChatServerWithThreads {
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
    // JPanel board = new Board();
-    static Snake snake = new Snake();
+    static Board board = new Board();
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
@@ -35,6 +36,12 @@ public class ChatServerWithThreads {
             // Accept next connection request and handle it.
             listener = new ServerSocket(LISTENING_PORT);
             System.out.println("Listening on port " + LISTENING_PORT);
+            board = new Board();
+
+            EventQueue.invokeLater(() -> {
+                JFrame ex = new Snake();
+                ex.setVisible(true);
+            });
             while (true) {
             	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
@@ -50,6 +57,11 @@ public class ChatServerWithThreads {
             System.out.println("Error:  " + e);
             return;
         }
+
+        
+            
+            
+        
 
     }  // end main()
 
@@ -77,9 +89,10 @@ public class ChatServerWithThreads {
             }
             catch (Exception e){
             e.printStackTrace();	
+            System.out.println("Error creating input/output stream");
             }
             }
-        //sends messages
+        //sends an object to the client
         public synchronized void send(Object output) {
         	try {
         		out.writeObject(output);
@@ -90,26 +103,26 @@ public class ChatServerWithThreads {
         }
 
 		public void run() {
-            //String clientAddress = client.getInetAddress().toString();// only for debugging purposes
+            String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
                   
 	            	//code to send messages
 	            	//String message = (String) in.readObject();
 	            	Object input=null;
-	            	input = (KeyEvent) in.readObject();
+	            	input = in.readObject();
                     
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
 	            		if(input instanceof KeyEvent) {
-                            snake.board.importkeyEvent((KeyEvent)input,id);
+                            board.importkeyEvent((KeyEvent)input,id);
                         }
                         
                         for(ConnectionHandler c :connections) {
 	            			synchronized(c){
                                 //System.out.println("sending"+input);
-                                //sending a JFrame
-	            				c.send(snake);
+                                //sending a JPanel of the entire snake game.
+	            				c.send(board);
 	            			}
 	            		}
 	            	}
@@ -117,12 +130,22 @@ public class ChatServerWithThreads {
 	            }
 	            catch (Exception e){
 
-	               // System.out.println("Error on connection with: " 
-	                 //       + clientAddress + ": " + e);
+	                System.out.println("Error on connection with: " 
+	                        + clientAddress + ": " + e);
+                    if(e instanceof EOFException) {
+                        System.out.println("Client disconnected: " + clientAddress);
+                    } else {
+                        e.printStackTrace();
+                    }
 	            }
             }
+            System.out.println("Connection closed: " );
         }
     }
 
+        
+    
 
-}
+
+}//end serverclass
+
