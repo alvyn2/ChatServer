@@ -19,12 +19,13 @@ import java.awt.EventQueue;
  * This version of the program creates a new thread for
  * every connection request.
  */
-public class ChatServerWithThreads {
+public class SnakeServer {
 //9876 default
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
    // JPanel board = new Board();
     static Board board = new Board();
+    static Snake ex =null;
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
@@ -37,11 +38,8 @@ public class ChatServerWithThreads {
             listener = new ServerSocket(LISTENING_PORT);
             System.out.println("Listening on port " + LISTENING_PORT);
             board = new Board();
+            //code copied from snake to run the game
 
-            EventQueue.invokeLater(() -> {
-                JFrame ex = new Snake();
-                ex.setVisible(true);
-            });
             while (true) {
             	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
@@ -84,8 +82,6 @@ public class ChatServerWithThreads {
             	//code to create input and output stream
             	out = new ObjectOutputStream(client.getOutputStream());
             	in = new ObjectInputStream(client.getInputStream());
-
-            	
             }
             catch (Exception e){
             e.printStackTrace();	
@@ -103,6 +99,10 @@ public class ChatServerWithThreads {
         }
 
 		public void run() {
+            EventQueue.invokeLater(() -> {
+                ex = new Snake();
+                ex.setVisible(true);
+            });
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
@@ -115,16 +115,20 @@ public class ChatServerWithThreads {
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
 	            		if(input instanceof KeyEvent) {
-                            board.importkeyEvent((KeyEvent)input,id);
-                        }
+                            ex=(Snake) ex;
+                            System.out.println("id"+id);
+                            System.out.println("keyevent"+input);
+                            ex.importkeyEvent((KeyEvent)input,id);
+                        
                         
                         for(ConnectionHandler c :connections) {
 	            			synchronized(c){
                                 //System.out.println("sending"+input);
-                                //sending a JPanel of the entire snake game.
-	            				c.send(board);
+                                //sneds the entire snake game gui
+	            				c.send(ex);
 	            			}
 	            		}
+                        }
 	            	}
 	            	//out.close();
 	            }

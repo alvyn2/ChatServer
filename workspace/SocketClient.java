@@ -13,6 +13,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.WriteAbortedException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -91,11 +92,11 @@ public class SocketClient {
 				while(server.isConnected()){
 				
 				//int recieve= in.readObject();
-				Board serverMessage=null;
+				Object serverMessage=null;
 				try {
-					serverMessage =(Board) in.readObject();
+					serverMessage = in.readObject();
                     if(serverMessage!=null) {
-                    	display.read(serverMessage);
+                    	display.read((JFrame)serverMessage);
 								
 					}
 				} catch (ClassNotFoundException e) {
@@ -109,7 +110,7 @@ public class SocketClient {
 				// prints to console
 				System.out.println("error in thread handling recieving:");
 				
-				if(e instanceof EOFException) {
+				if(e instanceof EOFException || e instanceof WriteAbortedException) {
                         System.out.println("Server disconnected: " );
                     } else {
                         e.printStackTrace();
@@ -127,8 +128,9 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    JFrame f=new JFrame("simple client gui");  
+    JFrame f=new JFrame("client gui");  
 	JPanel game=new JPanel();
+	Snake s= null;
     //String input="";
     //String output=null;
 	//JLabel input = new JLabel("message from server:");
@@ -146,7 +148,7 @@ public class SocketClient {
 	//f.add(b);  
 	//f.add(input);
 	 */
-	f.setSize(1000,500);  
+	f.setSize(200,200);  
 	f.setLayout(new GridLayout());  
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -164,11 +166,13 @@ public class SocketClient {
 	}
    
 	// reads a message from the server
-   public void read(Board g){
-
-	f.remove(game);
-	game=g;
-	f.add(game);
+   public void read(JFrame g){
+	System.out.println("reading snake jframe from server");
+	s=(Snake)g;
+	g.setVisible(true);
+	f.add(s.getBoard());
+	revalidate();
+	   repaint();
     //input.setText("message from server:"+ s);
 	System.out.println("game displayed");
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -185,11 +189,11 @@ public class SocketClient {
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
 	if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
-		System.out.println("up key pressed");
+		//System.out.println("up key pressed");
 		
 		try {
 			outs.writeObject(e);	
-			System.out.println("sending keyevent");
+			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
 			// TODO: handle exception
 			ex.printStackTrace();
@@ -199,11 +203,11 @@ public void keyPressed(KeyEvent e) {
 	}
 
 	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
-		System.out.println("left pressed");
+		//System.out.println("left pressed");
 		
 		try {
 			outs.writeObject(e);	
-			System.out.println("sending keyevent");
+			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
 			// TODO: handle exception
 			ex.printStackTrace();
@@ -214,11 +218,11 @@ public void keyPressed(KeyEvent e) {
 
 
 	if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
-		System.out.println(" right pressed");
+		//System.out.println(" right pressed");
 		
 		try {
 			outs.writeObject(e);	
-			System.out.println("sending keyevent");
+			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
 			// TODO: handle exception
 			ex.printStackTrace();
@@ -228,16 +232,31 @@ public void keyPressed(KeyEvent e) {
 	}
 
 	if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
-		System.out.println("up key pressed");
+		//System.out.println("up key pressed");
 		try {
 			outs.writeObject(e);	
-			System.out.println("sending keyevent");
+			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
 			// TODO: handle exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}
 	}
+
+	if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+		//System.out.println("up key pressed");
+		
+		try {
+			outs.writeObject(e);	
+			//System.out.println("sending keyevent");
+		} catch (Exception ex) {
+			// TODO: handle exception
+			ex.printStackTrace();
+			System.out.println("error sending keyevent");
+		}
+		
+	}
+
 }
 
 @Override
@@ -265,6 +284,7 @@ public void mouseMoved(MouseEvent e) {
 }
 @Override
 //creates a dialog to send a message when the button is clicked
+//old code from chatserver
 public void mouseClicked(MouseEvent e) {
 	
 	// gets a message from the user by craeting a dialog

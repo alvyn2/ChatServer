@@ -6,6 +6,7 @@
     import java.awt.EventQueue;
     import javax.swing.JFrame;
     import javax.swing.JPanel;
+    import java.awt.event.KeyEvent;
     //
     public class Snake extends JFrame {
         public Board board;
@@ -25,7 +26,13 @@
             setLocationRelativeTo(null);
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
+        public void importkeyEvent(KeyEvent e, int player) {
+            board.importkeyEvent(e,player);
+        }
 
+        public Board getBoard() {
+            return board;
+        }
         public static void main(String[] args) {
             
             EventQueue.invokeLater(() -> {

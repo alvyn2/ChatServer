@@ -23,7 +23,7 @@ public class Board extends JPanel implements ActionListener {
     private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 14;
-    private final int DELAY = 200;//changed to slow down from 140
+    private final int DELAY = 300;//changed to slow down from 140
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -170,13 +170,16 @@ public class Board extends JPanel implements ActionListener {
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 2);
-        String win="tie?";
+        String win="TIE!";
         if(dots>dots2){
             win="Player 1 wins!";
         }else if(dots2>dots){
             win="Player 2 wins!";
         }
         g.drawString(win, (B_WIDTH - metr.stringWidth(msg)) / 2, B_HEIGHT / 4);
+
+        g.drawString("Press space to restart", (B_WIDTH - metr.stringWidth(msg)) / 2, (3*B_HEIGHT) / 4);
+
     }
 
     private void checkApple() {
@@ -315,6 +318,21 @@ public class Board extends JPanel implements ActionListener {
     public void importkeyEvent(KeyEvent e, int player) {
     //copied code from keyPressed
     int key = e.getKeyCode();
+
+    if(key == KeyEvent.VK_SPACE && inGame == false){ 
+        inGame = true;
+                 leftDirection = false;
+                 rightDirection = true;
+                upDirection = false;
+                downDirection = false;
+    //duplicated variables for player 2 snake
+                 leftDirection2 = false;
+                rightDirection2 = false;
+                upDirection2 = false;
+               downDirection2 = true;
+
+                initGame();
+    }
     //adjusts key event code so player 1 is arrow keys and player 2 is wasd
     if(player==1){
     if(key==KeyEvent.VK_W){
@@ -481,9 +499,9 @@ public class Board extends JPanel implements ActionListener {
                 downDirection = false;
     //duplicated variables for player 2 snake
                  leftDirection2 = false;
-                rightDirection2 = true;
+                rightDirection2 = false;
                 upDirection2 = false;
-               downDirection2 = false;
+               downDirection2 = true;
 
                 initGame();
             }

@@ -3,12 +3,12 @@
 
 public class Main {
 
-//also copied from https://zetcode.com/javagames/snake/
     //calls other files to run and display the snake game
     public static void main(String[] args) {
     
-        ChatServerWithThreads server= new ChatServerWithThreads();
-        SocketClient client = new SocketClient();
+        SnakeServer server= new SnakeServer();
+        SocketClient client1 = new SocketClient();
+        SocketClient client2 = new SocketClient();
         //GUI display = new GUI();
         
     }
