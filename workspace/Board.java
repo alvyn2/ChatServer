@@ -67,7 +67,7 @@ public class Board extends JPanel implements ActionListener {
     
     private void initBoard() {
 
-        addKeyListener(new TAdapter());
+        //addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
@@ -189,10 +189,20 @@ public class Board extends JPanel implements ActionListener {
             dots++;
             locateApple();
         }
-        //duplicated variables for player 2 snake
-        if (((x2[0] == apple_x) && (y2[0] == apple_y)) || ((x2[0] == apple_x2) && (y2[0] == apple_y2))) {
+        if ( ((x[0] == apple_x2) && (y[0] == apple_y2))) {
+
+            dots++;
+            locateExtraApple();
+        }
+        //duplicated code for player 2's snake
+        if (((x2[0] == apple_x) && (y2[0] == apple_y))) {
             dots2++;
             locateApple();
+        }
+        if (((x2[0] == apple_x2) && (y2[0] == apple_y2))) {
+
+            dots2++;
+            locateExtraApple();
         }
     }
 
@@ -431,7 +441,8 @@ public class Board extends JPanel implements ActionListener {
 
         repaint();
     }
-
+    //key adapter removed becasue clients send KeyEvents to importKeyEvent method
+    /* 
     private class TAdapter extends KeyAdapter {
 
         @Override
@@ -509,6 +520,62 @@ public class Board extends JPanel implements ActionListener {
 
         }
     }
+    */
+    //code to import game state
+        //this is used to send the game state to the client
+        //so that the client can display the game accurately
+    public void importGameState(int d,int d2,int ax,int ay,int ax2,int ay2,boolean ld,boolean rd,boolean ud,boolean dd,boolean ld2,   boolean rd2 ,boolean ud2 ,boolean dd2, boolean ig){
+        
+      dots=d;
+      dots2=d2;
+      apple_x=ax;
+      apple_y=ay;
+
+      apple_x2=ax2;
+      apple_y2=ay2;
+
+      leftDirection = ld;
+      rightDirection = rd;
+      upDirection = ud;
+      downDirection = dd;
+    
+    leftDirection2 = ld2;
+    rightDirection2 = rd2;
+    upDirection2 = ud2;
+    downDirection2 = dd2;
+
+    inGame = ig;
+    }
+
+
+    public Object[] exportGameState(){
+        Object[] gameState = new Object[2];
+        int[] gameStateInt = new int[6];
+        boolean[] gameStateBool = new boolean[9];
+        gameStateInt[0]=dots;
+        gameStateInt[1]=dots2;
+        gameStateInt[2]=apple_x;
+        gameStateInt[3]=apple_y;
+  
+        gameStateInt[4]=apple_x2;
+        gameStateInt[5]=apple_y2;
+  
+        gameStateBool[0]=leftDirection;
+        gameStateBool[1]=rightDirection;
+        gameStateBool[2]=upDirection;
+        gameStateBool[3]=downDirection;
+      
+        gameStateBool[4]=leftDirection2;
+        gameStateBool[5]=rightDirection2;
+        gameStateBool[6]=upDirection2;
+        gameStateBool[7]=downDirection2;
+  
+        gameStateBool[8]=inGame;
+
+        gameState[0]=gameStateInt;
+        gameState[1]=gameStateBool;
+        return gameState;
+      }
 }
 
 

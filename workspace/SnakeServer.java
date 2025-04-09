@@ -103,6 +103,7 @@ public class SnakeServer {
                 ex = new Snake();
                 ex.setVisible(true);
             });
+            send(ex.exportGameState());
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
@@ -125,7 +126,8 @@ public class SnakeServer {
 	            			synchronized(c){
                                 //System.out.println("sending"+input);
                                 //sneds the entire snake game gui
-	            				c.send(ex);
+                                Object[] gameState = ex.exportGameState();
+	            				c.send(gameState);
 	            			}
 	            		}
                         }

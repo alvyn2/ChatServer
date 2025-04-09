@@ -96,7 +96,7 @@ public class SocketClient {
 				try {
 					serverMessage = in.readObject();
                     if(serverMessage!=null) {
-                    	display.read((JFrame)serverMessage);
+                    	display.read((Object[])serverMessage);
 								
 					}
 				} catch (ClassNotFoundException e) {
@@ -128,7 +128,7 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    JFrame f=new JFrame("client gui");  
+    Snake f=new Snake();  
 	JPanel game=new JPanel();
 	Snake s= null;
     //String input="";
@@ -148,11 +148,24 @@ public class SocketClient {
 	//f.add(b);  
 	//f.add(input);
 	 */
-	f.setSize(200,200);  
-	f.setLayout(new GridLayout());  
+	//f.setSize(200,200);  
+	//f.setLayout(new GridLayout());  
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	
+	//pauses the game
+	Object[] initialGameState=f.exportGameState();
+	boolean[] pausedBooleans=(boolean[])initialGameState[1];
+	for(int i=0;i<pausedBooleans.length;i++){
+		if(pausedBooleans[i]==true){
+			pausedBooleans[i]=false;
+		}
+	}
+	initialGameState[1]=pausedBooleans;
+	int[] ints=(int[])initialGameState[0];
+	boolean[] bools=(boolean[])initialGameState[1];
+	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8]);
+	revalidate();
+	   repaint();
 	   //button to send messages
 		//b.addMouseListener(this);
 		
@@ -166,19 +179,17 @@ public class SocketClient {
 	}
    
 	// reads a message from the server
-   public void read(JFrame g){
-	System.out.println("reading snake jframe from server");
-	s=(Snake)g;
-	g.setVisible(true);
-	f.add(s.getBoard());
+   public void read(Object[] gameState){
+	System.out.println("importing game state from server");
+	int[] ints=(int[])gameState[0];
+	boolean[] bools=(boolean[])gameState[1];
+	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8]);
 	revalidate();
 	   repaint();
     //input.setText("message from server:"+ s);
 	System.out.println("game displayed");
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-
-
    public void update(){
     //output(getName());
     revalidate();
@@ -195,7 +206,7 @@ public void keyPressed(KeyEvent e) {
 			outs.writeObject(e);	
 			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
-			// TODO: handle exception
+			// handles exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}
@@ -209,7 +220,7 @@ public void keyPressed(KeyEvent e) {
 			outs.writeObject(e);	
 			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
-			// TODO: handle exception
+			// handles exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}
@@ -224,7 +235,7 @@ public void keyPressed(KeyEvent e) {
 			outs.writeObject(e);	
 			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
-			// TODO: handle exception
+			// handles exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}
@@ -237,7 +248,7 @@ public void keyPressed(KeyEvent e) {
 			outs.writeObject(e);	
 			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
-			// TODO: handle exception
+			// handles exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}
@@ -250,7 +261,7 @@ public void keyPressed(KeyEvent e) {
 			outs.writeObject(e);	
 			//System.out.println("sending keyevent");
 		} catch (Exception ex) {
-			// TODO: handle exception
+			// handles exception
 			ex.printStackTrace();
 			System.out.println("error sending keyevent");
 		}

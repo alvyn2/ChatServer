@@ -29,9 +29,11 @@
         public void importkeyEvent(KeyEvent e, int player) {
             board.importkeyEvent(e,player);
         }
-
-        public Board getBoard() {
-            return board;
+        public void importGameState(int d,int d2,int ax,int ay,int ax2,int ay2,boolean ld,boolean rd,boolean ud,boolean dd,boolean ld2, boolean rd2 ,boolean ud2 ,boolean dd2, boolean ig) {
+            board.importGameState(d, d2, ax, ay, ax2, ay2, ld, rd, ud, dd, ld2, rd2 , ud2 , dd2, ig);
+        }
+        public Object[] exportGameState(){
+            return board.exportGameState();
         }
         public static void main(String[] args) {
             
