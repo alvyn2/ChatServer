@@ -182,12 +182,13 @@ public class SocketClient {
 @Override
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
+	String key= "";
 	if (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode() == KeyEvent.VK_W) {
 		//System.out.println("up key pressed");
-		
+		key="w";
 		try {
-			outs.writeObject(e);	
-			//System.out.println("sending keyevent");
+			outs.writeObject(key);	
+			System.out.println("sending w");
 		} catch (Exception ex) {
 			// handles exception
 			ex.printStackTrace();
@@ -198,10 +199,10 @@ public void keyPressed(KeyEvent e) {
 
 	if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
 		//System.out.println("left pressed");
-		
+		key="a";
 		try {
-			outs.writeObject(e);	
-			//System.out.println("sending keyevent");
+			outs.writeObject(key);	
+			System.out.println("sending a");
 		} catch (Exception ex) {
 			// handles exception
 			ex.printStackTrace();
@@ -213,10 +214,10 @@ public void keyPressed(KeyEvent e) {
 
 	if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 		//System.out.println(" right pressed");
-		
+		key="d";
 		try {
-			outs.writeObject(e);	
-			//System.out.println("sending keyevent");
+			outs.writeObject(key);	
+			System.out.println("sending d");
 		} catch (Exception ex) {
 			// handles exception
 			ex.printStackTrace();
@@ -227,9 +228,10 @@ public void keyPressed(KeyEvent e) {
 
 	if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 		//System.out.println("up key pressed");
+		key="s";
 		try {
-			outs.writeObject(e);	
-			//System.out.println("sending keyevent");
+			outs.writeObject(key);	
+			System.out.println("sending s");
 		} catch (Exception ex) {
 			// handles exception
 			ex.printStackTrace();
@@ -239,9 +241,9 @@ public void keyPressed(KeyEvent e) {
 
 	if (e.getKeyCode() == KeyEvent.VK_SPACE) {
 		//System.out.println("up key pressed");
-		
+		key="space";
 		try {
-			outs.writeObject(e);	
+			outs.writeObject(key);	
 			System.out.println("sending space");
 		} catch (Exception ex) {
 			// handles exception

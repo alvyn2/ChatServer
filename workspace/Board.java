@@ -326,11 +326,11 @@ public class Board extends JPanel implements ActionListener {
 
     }
 
-    public void importkeyEvent(KeyEvent e, int player) {
+    public void importkeyEvent(String key, int player) {
     //copied code from keyPressed
-    int key = e.getKeyCode();
-
-    if(key == KeyEvent.VK_SPACE && inGame == false){ 
+    //int key = e.getKeyCode();
+    int keyCode=-1;
+    if(key == "space" && inGame == false){ 
                 inGame = true;
                  leftDirection = false;
                  rightDirection = true;
@@ -346,87 +346,90 @@ public class Board extends JPanel implements ActionListener {
     }
     //adjusts key event code so player 1 is arrow keys and player 2 is wasd
     if(player==1){
-    if(key==KeyEvent.VK_W){
-        key=KeyEvent.VK_UP;
+    if(key=="w"){
+        keyCode=KeyEvent.VK_UP;
     }
-    if(key==KeyEvent.VK_A){
-        key=KeyEvent.VK_LEFT;
+    if(key=="a"){
+        keyCode=KeyEvent.VK_LEFT;
     }
-    if(key==KeyEvent.VK_S){
-        key=KeyEvent.VK_DOWN;
+    if(key=="s"){
+        keyCode=KeyEvent.VK_DOWN;
     }
-    if(key==KeyEvent.VK_D){
-        key=KeyEvent.VK_RIGHT;
+    if(key=="d"){
+        keyCode=KeyEvent.VK_RIGHT;
     }
     
     }
 
     if(player==2){
-        if(key==KeyEvent.VK_UP){
-            key=KeyEvent.VK_W;
+        if(key=="w"){
+            keyCode=KeyEvent.VK_W;
         }
-        if(key==KeyEvent.VK_LEFT){
-            key=KeyEvent.VK_A;
+        if(key=="s"){
+            keyCode=KeyEvent.VK_A;
         }
-        if(key==KeyEvent.VK_DOWN){
-            key=KeyEvent.VK_S;
+        if(key=="a"){
+            keyCode=KeyEvent.VK_S;
         }
-        if(key==KeyEvent.VK_RIGHT){
-            key=KeyEvent.VK_D;
+        if(key=="d"){
+            keyCode=KeyEvent.VK_D;
         }
         
     }
 
 
 
-    if ((key == KeyEvent.VK_LEFT) && (!rightDirection)) {
+    if ((keyCode == KeyEvent.VK_LEFT) && (!rightDirection)) {
         leftDirection = true;
         upDirection = false;
         downDirection = false;
     }
 
-    if ((key == KeyEvent.VK_RIGHT) && (!leftDirection)) {
+    if ((keyCode == KeyEvent.VK_RIGHT) && (!leftDirection)) {
         rightDirection = true;
         upDirection = false;
         downDirection = false;
     }
 
-    if ((key == KeyEvent.VK_UP) && (!downDirection)) {
+    if ((keyCode == KeyEvent.VK_UP) && (!downDirection)) {
         upDirection = true;
         rightDirection = false;
         leftDirection = false;
     }
 
-    if ((key == KeyEvent.VK_DOWN) && (!upDirection)) {
+    if ((keyCode == KeyEvent.VK_DOWN) && (!upDirection)) {
         downDirection = true;
         rightDirection = false;
         leftDirection = false;
     }
 
     //wasd is for player 2
-            if ((key == KeyEvent.VK_A) && (!rightDirection)) {
+            if ((keyCode == KeyEvent.VK_A) && (!rightDirection)) {
                 leftDirection2 = true;
                 upDirection2 = false;
                 downDirection2 = false;
             }
 
-            if ((key == KeyEvent.VK_D) && (!leftDirection)) {
+            if ((keyCode == KeyEvent.VK_D) && (!leftDirection)) {
                 rightDirection2 = true;
                 upDirection2 = false;
                 downDirection2 = false;
             }
 
-            if ((key == KeyEvent.VK_W) && (!downDirection)) {
+            if ((keyCode == KeyEvent.VK_W) && (!downDirection)) {
                 upDirection2 = true;
                 rightDirection2 = false;
                 leftDirection2 = false;
             }
 
-            if ((key == KeyEvent.VK_S) && (!upDirection)) {
+            if ((keyCode == KeyEvent.VK_S) && (!upDirection)) {
                 downDirection2 = true;
                 rightDirection2 = false;
                 leftDirection2 = false;
             }
+
+            System.out.println("key imported: "+key);
+            this.actionPerformed(null);
     }
 
     @Override
@@ -549,7 +552,8 @@ public class Board extends JPanel implements ActionListener {
     inGame = ig;
     }
 
-
+//code to export game states
+//sends an Object array consisting of an int array and a boolean array, specifying all the game variables that change
     public Object[] exportGameState(){
         Object[] gameState = new Object[2];
         int[] gameStateInt = new int[6];

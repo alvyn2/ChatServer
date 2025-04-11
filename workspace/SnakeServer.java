@@ -38,8 +38,9 @@ public class SnakeServer {
             listener = new ServerSocket(LISTENING_PORT);
             System.out.println("Listening on port " + LISTENING_PORT);
             board = new Board();
-            //code copied from snake to run the game
 
+
+            
             while (true) {
             	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
@@ -99,10 +100,11 @@ public class SnakeServer {
         }
 
 		public void run() {
-
+        
+            //code copied from snake to run the game
                 ex = new Snake(0);
                 ex.setVisible(true);
-
+                //ex.removeKeyListener(ex.board);
             //ex.setTitle("server snake");
             send(ex.exportGameState());
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
@@ -116,28 +118,30 @@ public class SnakeServer {
                     
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
-	            		if(input instanceof KeyEvent) {
+	            		if(input instanceof String) {
                             ex=(Snake) ex;
-                            System.out.println("id"+id);
-                            System.out.println("keyevent"+input);
-                            ex.importkeyEvent((KeyEvent)input,id);
+                            //System.out.println("id"+id);
+                            System.out.println("keyevent: "+input);
+                            ex.importkeyEvent((String)input,id);
+                           // Thread updater= new UpdateHandler(ex,(String)input,id);
+                            //updater.start();
+                            //updater.join();
+                            
+                            for(ConnectionHandler c :connections) {
+                                synchronized(c){
+                                    //System.out.println("sending"+input);
+                                    //sneds the gamestate of the snake gui
+                                    Object[] gameState = ex.exportGameState();
+                                    c.send(gameState);
+                                }
+                            }
                         
                         
                         
 	            	}
 
-                    for(ConnectionHandler c :connections) {
-                        synchronized(c){
-                            //System.out.println("sending"+input);
-                            //sneds the entire snake game gui
-                            Object[] gameState = ex.exportGameState();
-                            c.send(gameState);
-                        }
-                    }
-                    }
-	            	//out.close();
-	            }
-	            catch (Exception e){
+                }
+            }catch (Exception e){
 
 	                System.out.println("Error on connection with: " 
 	                        + clientAddress + ": " + e);
@@ -153,7 +157,28 @@ public class SnakeServer {
     }
 
         
-    
+    private static class UpdateHandler extends Thread {
+        String keyevent="";
+        Snake frame;
+        int player;
+        public UpdateHandler(Snake f, String k,int p) {
+            keyevent=k;
+            frame=f;
+            player=p;
+        }
+        
+        
+        
+        public void run() {
+            
+                    //System.out.println("updating");
+                    frame.importkeyEvent(keyevent, player);
+                    frame.repaint();
+
+        }
+
+
+    }
 
 
 }//end serverclass
