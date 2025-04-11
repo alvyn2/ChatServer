@@ -31,6 +31,7 @@ public class SocketClient {
     static GUI display=new GUI();
 	static ObjectOutputStream outs =null;
 	static ObjectInputStream ins =null;
+	static Object[] gameState=null;
 	//private static boolean sending=false;
 	private static String message=null;
 	/*
@@ -90,14 +91,15 @@ public class SocketClient {
         	try {
 				final ObjectInputStream in =ins;
 				while(server.isConnected()){
-				
+					//unpauses teh game when the server connects
+					//display.read(gameState);
 				//int recieve= in.readObject();
 				Object serverMessage=null;
 				try {
 					serverMessage = in.readObject();
                     if(serverMessage!=null) {
                     	display.read((Object[])serverMessage);
-								
+						System.out.println("importing game state");								
 					}
 				} catch (ClassNotFoundException e) {
 					// handles the exception
@@ -128,50 +130,31 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    Snake f=new Snake();  
-	JPanel game=new JPanel();
-	Snake s= null;
-    //String input="";
-    //String output=null;
-	//JLabel input = new JLabel("message from server:");
+    Snake f=new Snake(1);  
+	//JPanel game=new JPanel();
+	//Snake s= null;
 
    public GUI(){
-	// define varous elements
-	
-	//JLabel messageLabel = new JLabel("label(message?");
-
-	//JButton b=new JButton("Click Here to send a message");  
-	/* 
-	// add elements to the frame
-	//f.add(output);
-	//f.add(messageLabel);
-	//f.add(b);  
-	//f.add(input);
-	 */
-	//f.setSize(200,200);  
-	//f.setLayout(new GridLayout());  
+	//show the frame
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	//pauses the game
-	Object[] initialGameState=f.exportGameState();
-	boolean[] pausedBooleans=(boolean[])initialGameState[1];
-	for(int i=0;i<pausedBooleans.length;i++){
-		if(pausedBooleans[i]==true){
-			pausedBooleans[i]=false;
-		}
-	}
-	initialGameState[1]=pausedBooleans;
-	int[] ints=(int[])initialGameState[0];
-	boolean[] bools=(boolean[])initialGameState[1];
-	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8]);
+	gameState=f.exportGameState();
+	boolean[] pausedBooleans=(boolean[])gameState[1];
+	gameState[1]=pausedBooleans;
+	int[] ints=(int[])gameState[0];
+	boolean[] bools=(boolean[])gameState[1];
+	//pauses the game by setting all the direction values to false
+	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],false,false,false,false,false,false,false,false,bools[8]);
 	revalidate();
 	   repaint();
-	   //button to send messages
-		//b.addMouseListener(this);
-		
+
         //System.out.print("Gui displayed");
 		//updates the gui
-		f.addKeyListener(this);
+		JLabel label = new JLabel("Client GUI");
+		f.add(label);
+		label.addKeyListener(this);
+		f.board.addKeyListener(this);
 		revalidate();
 	   repaint();
 	   
@@ -259,7 +242,7 @@ public void keyPressed(KeyEvent e) {
 		
 		try {
 			outs.writeObject(e);	
-			//System.out.println("sending keyevent");
+			System.out.println("sending space");
 		} catch (Exception ex) {
 			// handles exception
 			ex.printStackTrace();
@@ -296,6 +279,7 @@ public void mouseMoved(MouseEvent e) {
 @Override
 //creates a dialog to send a message when the button is clicked
 //old code from chatserver
+//does nothing becasue theres no button or mouselistener
 public void mouseClicked(MouseEvent e) {
 	
 	// gets a message from the user by craeting a dialog
@@ -352,51 +336,21 @@ public void actionPerformed(ActionEvent e) {
 
     public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException{
         //get the localhost IP address, if server is running on some other IP, you need to use that
-        //SocketClient t = new SocketClient();
     	InetAddress host = InetAddress.getLocalHost();
+		//host=InetAdress.get(?)
         Socket socket = null;
-        //ObjectOutputStream oos = null;
-        //ObjectInputStream ois = null;
         //establish socket connection to server
         socket = new Socket(host.getHostName(), 9876);
         ins= new ObjectInputStream(socket.getInputStream());
         outs = new ObjectOutputStream(socket.getOutputStream());
 		System.out.println("sucessfully connected to server");
-        //outs.writeObject("hello from the client side");
-        
-        //System.out.println((String) ins.readObject());
+
         Thread rh=new RecieveHandler(socket);
             rh.start();
-
-        //for(int i=0; i<5;i++){
-            //establish socket connection to server
-            //socket = new Socket(host.getHostName(), 9876);
-            //Thread wh=new SendHandler(socket);
-            
-            //wh.start();
-            //write to socket using ObjectOutputStream
-            //commented out code to test that connection is working
-            /* 
-            ois = new ObjectInputStream(socket.getInputStream());
-            oos = new ObjectOutputStream(socket.getOutputStream());
-            //System.out.println("Sending request to Socket Server");
-            // System.out.println("Sending request to Socket Server");
-            //if(i==4)oos.writeObject("exit");
-            //else oos.writeObject(""+i);
-            //read the server response message
-            
-            String message = (String) ois.readObject();
-            System.out.println("Message: " + message);
-            
-            //close resources
-            ois.close();
-            oos.close();
-            */
             while(true){
                 display.update();
 			}
-            //Thread.sleep(100);
-       // } end of for loop for testing
+            //Thread.sleep(100)
         
         
     }

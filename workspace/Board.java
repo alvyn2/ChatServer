@@ -1,4 +1,5 @@
 //code for snake copied from https://zetcode.com/javagames/snake/
+//Graphics by Bas de Reuver
 //basically a game of snake
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,8 +19,8 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
     
-    private final int B_WIDTH = 900;//changed to 700 from smaller 300
-    private final int B_HEIGHT = 720;//changed to 700 from smaller 300
+    private final int B_WIDTH = 600;//changed to 700 from smaller 300
+    private final int B_HEIGHT = 600;//changed to 700 from smaller 300
     private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 14;
@@ -45,16 +46,16 @@ public class Board extends JPanel implements ActionListener {
     private boolean downDirection = false;
     //duplicated variables for player 2 snake
     private boolean leftDirection2 = false;
-    private boolean rightDirection2 = true;
+    private boolean rightDirection2 = false;
     private boolean upDirection2 = false;
-    private boolean downDirection2 = false;
+    private boolean downDirection2 = true;
 
     private boolean inGame = true;
 
     private Timer timer;
     private Image ball;
     private Image apple;
-    private Image apple2;
+    private Image apple2;//extra apple
     private Image head;
     //duplicated variables for player 2 snake
     private Image head2;
@@ -67,7 +68,7 @@ public class Board extends JPanel implements ActionListener {
     
     private void initBoard() {
 
-        //addKeyListener(new TAdapter());
+        addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
@@ -102,7 +103,7 @@ public class Board extends JPanel implements ActionListener {
 
     private void initGame() {
 
-        dots = 3;
+        dots =3;
         dots2=3;
         //reset to default values
         //duplicated code for player 2 snake
@@ -110,7 +111,7 @@ public class Board extends JPanel implements ActionListener {
             x2[z] = 50 - z * 10;
             y2[z] = 50;
         }
-
+        //original code for player 1 snake
         for (int z = 0; z < dots; z++) {
             x[z] = 50 - z * 10;
             y[z] = 50;
@@ -330,7 +331,7 @@ public class Board extends JPanel implements ActionListener {
     int key = e.getKeyCode();
 
     if(key == KeyEvent.VK_SPACE && inGame == false){ 
-        inGame = true;
+                inGame = true;
                  leftDirection = false;
                  rightDirection = true;
                 upDirection = false;
@@ -442,7 +443,8 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
     //key adapter removed becasue clients send KeyEvents to importKeyEvent method
-    /* 
+    //siabels so the game cant be modified through the server's snake window
+    
     private class TAdapter extends KeyAdapter {
 
         @Override
@@ -520,7 +522,7 @@ public class Board extends JPanel implements ActionListener {
 
         }
     }
-    */
+    
     //code to import game state
         //this is used to send the game state to the client
         //so that the client can display the game accurately

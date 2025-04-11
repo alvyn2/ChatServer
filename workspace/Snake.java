@@ -10,20 +10,26 @@
     //
     public class Snake extends JFrame {
         public Board board;
-        public Snake() {
+        public Snake(int type) {
             
-            initUI();
+            initUI(type);
         }
         
-        private void initUI() {
+        private void initUI(int t) {
             board = new Board();
             add(board);
             
             setResizable(false);
             pack();
-            
-            setTitle("Snake");
-            setLocationRelativeTo(null);
+             if(t==0){
+                setTitle("Server Snake");
+                
+             }else{
+                setTitle("Client Snake");
+                setLocationRelativeTo(null);
+
+             }
+            //setLocationRelativeTo(null);//sets the JFrame to the center of the screen
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
         public void importkeyEvent(KeyEvent e, int player) {
@@ -38,7 +44,7 @@
         public static void main(String[] args) {
             
             EventQueue.invokeLater(() -> {
-                JFrame ex = new Snake();
+                JFrame ex = new Snake(0);
                 ex.setVisible(true);
             });
         }

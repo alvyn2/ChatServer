@@ -99,10 +99,11 @@ public class SnakeServer {
         }
 
 		public void run() {
-            EventQueue.invokeLater(() -> {
-                ex = new Snake();
+
+                ex = new Snake(0);
                 ex.setVisible(true);
-            });
+
+            //ex.setTitle("server snake");
             send(ex.exportGameState());
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
@@ -122,16 +123,18 @@ public class SnakeServer {
                             ex.importkeyEvent((KeyEvent)input,id);
                         
                         
-                        for(ConnectionHandler c :connections) {
-	            			synchronized(c){
-                                //System.out.println("sending"+input);
-                                //sneds the entire snake game gui
-                                Object[] gameState = ex.exportGameState();
-	            				c.send(gameState);
-	            			}
-	            		}
-                        }
+                        
 	            	}
+
+                    for(ConnectionHandler c :connections) {
+                        synchronized(c){
+                            //System.out.println("sending"+input);
+                            //sneds the entire snake game gui
+                            Object[] gameState = ex.exportGameState();
+                            c.send(gameState);
+                        }
+                    }
+                    }
 	            	//out.close();
 	            }
 	            catch (Exception e){
