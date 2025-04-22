@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 
 
 // creates a socket to send and recieve mesages to and from a server
+//to run the game of snake with two players
 public class SocketClient {
 
     static GUI display=new GUI();
@@ -38,43 +39,10 @@ public class SocketClient {
 	 *  We will build on this project in the future to make a full fledged server based game,
 	 *  so make sure you can read your code later! Use good programming practices.
 	 *  
-	 *  ****HINT**** you may wish to have a thread be in charge of sending information 
-	 *  and another thread in charge of receiving information.
+	 *  
 	*/
 
-	//creates a thread to send messages
 
-// no need for a thread to send messages because messages are sent when the user does actions such as clikicng the mouse or pressing a key
-	/* 
-	private static class SendHandler extends Thread {
-        Socket server;
-        SendHandler(Socket socket) {
-            server = socket;
-        }
-
-        public void run() {
-        	try {
-				final ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-
-				message="hello server";
-					while(true){
-						
-					
-						System.out.println("reached sending=true"+sending);
-
-						System.out.println("sending message"+message);
-						out.writeObject(message);
-		
-						}
-					}			
-				
-			} catch (IOException e) {
-				// prints to console
-				System.out.println("error in thread handling sending");
-			}
-        }
-
-		*/
 
 	
 // thread to handle recieveing messages
@@ -96,10 +64,15 @@ public class SocketClient {
 				//int recieve= in.readObject();
 				Object serverMessage=null;
 				try {
-					serverMessage = in.readObject();
+
+					serverMessage =(Object[]) in.readObject();
                     if(serverMessage!=null) {
                     	display.read((Object[])serverMessage);
-						System.out.println("importing game state");								
+						Object[] gameState=(Object[]) serverMessage;
+						boolean[] booleans=(boolean[]) (gameState[1]);
+						boolean ingame=booleans[8];
+						System.out.println("ingame:"+ingame);
+						//System.out.println("importing game state");		debug code in read function						
 					}
 				} catch (ClassNotFoundException e) {
 					// handles the exception
@@ -113,7 +86,7 @@ public class SocketClient {
 				System.out.println("error in thread handling recieving:");
 				
 				if(e instanceof EOFException || e instanceof WriteAbortedException) {
-                        System.out.println("Server disconnected: " );
+                        System.out.println("Server disconnected " );
                     } else {
                         e.printStackTrace();
                     }
@@ -145,7 +118,7 @@ public class SocketClient {
 	int[] ints=(int[])gameState[0];
 	boolean[] bools=(boolean[])gameState[1];
 	//pauses the game by setting all the direction values to false
-	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],false,false,false,false,false,false,false,false,bools[8]);
+	//f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],false,false,false,false,false,false,false,false,bools[8]);
 	revalidate();
 	   repaint();
 
@@ -166,11 +139,11 @@ public class SocketClient {
 	System.out.println("importing game state from server");
 	int[] ints=(int[])gameState[0];
 	boolean[] bools=(boolean[])gameState[1];
-	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8]);
+	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8],(int[])gameState[2],(int[])gameState[3],(int[])gameState[4],(int[])gameState[5]);
 	revalidate();
 	   repaint();
-    //input.setText("message from server:"+ s);
-	System.out.println("game displayed");
+
+	//System.out.println("game displayed");
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
    public void update(){

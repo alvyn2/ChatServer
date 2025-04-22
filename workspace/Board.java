@@ -19,12 +19,12 @@ import javax.swing.Timer;
 
 public class Board extends JPanel implements ActionListener {
     
-    private final int B_WIDTH = 600;//changed to 700 from smaller 300
-    private final int B_HEIGHT = 600;//changed to 700 from smaller 300
+    private final int B_WIDTH = 700;//changed to 700 from smaller 300
+    private final int B_HEIGHT = 700;//changed to 700 from smaller 300
     private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 14;
-    private final int DELAY = 300;//changed to slow down from 140
+    private final int DELAY = 800;//changed to slow down from 140
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -34,6 +34,7 @@ public class Board extends JPanel implements ActionListener {
 
     private int dots;
     private int dots2;//duplicated variable for player 2 snake
+
     private int apple_x;
     private int apple_y;
 
@@ -529,10 +530,11 @@ public class Board extends JPanel implements ActionListener {
     //code to import game state
         //this is used to send the game state to the client
         //so that the client can display the game accurately
-    public void importGameState(int d,int d2,int ax,int ay,int ax2,int ay2,boolean ld,boolean rd,boolean ud,boolean dd,boolean ld2,   boolean rd2 ,boolean ud2 ,boolean dd2, boolean ig){
+    public void importGameState(int d,int d2,int ax,int ay,int ax2,int ay2,boolean ld,boolean rd,boolean ud,boolean dd,boolean ld2,   boolean rd2 ,boolean ud2 ,boolean dd2, boolean ig,int[] xi,int[] yi,int[] xi2,int[] yi2) {
         
       dots=d;
       dots2=d2;
+
       apple_x=ax;
       apple_y=ay;
 
@@ -550,16 +552,30 @@ public class Board extends JPanel implements ActionListener {
     downDirection2 = dd2;
 
     inGame = ig;
+
+ 
+
+    for (int i = 0; i < dots; i++) {
+        x[i] =xi[i];
+        y[i] =yi[i];
+
+    }
+    for (int i = 0; i < dots2; i++) {
+
+        x2[i] =xi2[i];
+        y2[i] =yi2[i];
+    }
     }
 
 //code to export game states
 //sends an Object array consisting of an int array and a boolean array, specifying all the game variables that change
     public Object[] exportGameState(){
-        Object[] gameState = new Object[2];
+        Object[] gameState = new Object[6];
         int[] gameStateInt = new int[6];
         boolean[] gameStateBool = new boolean[9];
         gameStateInt[0]=dots;
         gameStateInt[1]=dots2;
+
         gameStateInt[2]=apple_x;
         gameStateInt[3]=apple_y;
   
@@ -580,6 +596,11 @@ public class Board extends JPanel implements ActionListener {
 
         gameState[0]=gameStateInt;
         gameState[1]=gameStateBool;
+        gameState[2]=x;
+        gameState[3]=y;
+        gameState[4]=x2;
+        gameState[5]=y2;
+        
         return gameState;
       }
 }
