@@ -24,23 +24,30 @@ public class SnakeServer {
     public static final int LISTENING_PORT = 9876;
     private static ArrayList<ConnectionHandler> connections = new ArrayList<ConnectionHandler>(); 
    // JPanel board = new Board();
-    static Board board = new Board();
-    static Snake ex =null;
+    static Board game = new Board();
+    //static Snake ex =null;
+    static JFrame display= new JFrame();
 	public static void main(String[] args) {
     	ServerSocket listener ; // Listens for incoming connections.
         //Socket connection;    // For communication with the connecting program.
         int idIterator=1;
         /* Accept and process connections forever, or until some error occurs. */
-        
+        //ex = new Snake(0);
+        //ex.setVisible(true);
         try {
 
             // Accept next connection request and handle it.
             listener = new ServerSocket(LISTENING_PORT);
             System.out.println("Listening on port " + LISTENING_PORT);
-            board = new Board();
-
-
-            
+        
+            //code copied form snake to display game 
+            game = new Board();
+            display.add(game);
+        
+            display.setVisible(true);
+            display.setResizable(false);
+            display.pack();
+            display.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             while (true) {
             	//create a socket to form connection and create a thread to handle the socket
             	Socket s = listener.accept();
@@ -101,12 +108,9 @@ public class SnakeServer {
 
 		public void run() {
         
-            //code copied from snake to run the game
-                ex = new Snake(0);
-                ex.setVisible(true);
-                //ex.removeKeyListener(ex.board);
+   
             //ex.setTitle("server snake");
-            send(ex.exportGameState());
+            send(game.exportGameState());
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
             while(client.isConnected()) {
 	            try {
@@ -115,23 +119,21 @@ public class SnakeServer {
 	            	//String message = (String) in.readObject();
 	            	Object input=null;
 	            	input = in.readObject();
-                    
+                    //System.out.println("input: "+input);
 	            	if(input!=null) {
 	            		//System.out.println("server recieved"+input);
 	            		if(input instanceof String) {
-                            ex=(Snake) ex;
+                            
                             //System.out.println("id"+id);
                             System.out.println("keyevent: "+input);
-                            ex.importkeyEvent((String)input,id);
-                           // Thread updater= new UpdateHandler(ex,(String)input,id);
-                            //updater.start();
-                            //updater.join();
+                            game.importkeyEvent((String)input,id);
+                           // sleep(500);
                             
                             for(ConnectionHandler c :connections) {
                                 synchronized(c){
                                     //System.out.println("sending"+input);
-                                    //sneds the gamestate of the snake gui
-                                    Object[] gameState = ex.exportGameState();
+                                    //sends the gamestate of the snake gui
+                                    Object[] gameState = game.exportGameState();
                                     c.send(gameState);
                                 }
                             }
@@ -143,9 +145,8 @@ public class SnakeServer {
                 }
             }catch (Exception e){
 
-	                System.out.println("Error on connection with: " 
-	                        + clientAddress + ": " + e);
-                    if(e instanceof EOFException) {
+	                System.out.println("Error on connection with: " + clientAddress + ": " + e);
+                    if(e instanceof EOFException || e instanceof WriteAbortedException) {
                         System.out.println("Client disconnected: " + clientAddress);
                     } else {
                         e.printStackTrace();
@@ -156,30 +157,7 @@ public class SnakeServer {
         }
     }
 
-        
-    private static class UpdateHandler extends Thread {
-        String keyevent="";
-        Snake frame;
-        int player;
-        public UpdateHandler(Snake f, String k,int p) {
-            keyevent=k;
-            frame=f;
-            player=p;
-        }
-        
-        
-        
-        public void run() {
-            
-                    //System.out.println("updating");
-                    frame.importkeyEvent(keyevent, player);
-                    frame.repaint();
-
-        }
-
-
-    }
-
+ 
 
 }//end serverclass
 

@@ -69,7 +69,7 @@ public class Board extends JPanel implements ActionListener {
     
     private void initBoard() {
 
-        addKeyListener(new TAdapter());
+        //addKeyListener(new TAdapter());
         setBackground(Color.black);
         setFocusable(true);
 
@@ -430,6 +430,7 @@ public class Board extends JPanel implements ActionListener {
             }
 
             System.out.println("key imported: "+key);
+            System.out.println("down direction: "+downDirection);
             this.actionPerformed(null);
     }
 
@@ -509,7 +510,7 @@ public class Board extends JPanel implements ActionListener {
 
             //press space to restart
             if (key == KeyEvent.VK_SPACE) {
-                inGame = true;
+                
                  leftDirection = false;
                  rightDirection = true;
                 upDirection = false;
@@ -519,8 +520,8 @@ public class Board extends JPanel implements ActionListener {
                 rightDirection2 = false;
                 upDirection2 = false;
                downDirection2 = true;
-
-                initGame();
+                
+                inGame=true;
             }
 
 

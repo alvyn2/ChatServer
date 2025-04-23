@@ -68,11 +68,7 @@ public class SocketClient {
 					serverMessage =(Object[]) in.readObject();
                     if(serverMessage!=null) {
                     	display.read((Object[])serverMessage);
-						Object[] gameState=(Object[]) serverMessage;
-						boolean[] booleans=(boolean[]) (gameState[1]);
-						boolean ingame=booleans[8];
-						System.out.println("ingame:"+ingame);
-						//System.out.println("importing game state");		debug code in read function						
+									
 					}
 				} catch (ClassNotFoundException e) {
 					// handles the exception
@@ -124,9 +120,9 @@ public class SocketClient {
 
         //System.out.print("Gui displayed");
 		//updates the gui
-		JLabel label = new JLabel("Client GUI");
-		f.add(label);
-		label.addKeyListener(this);
+		//JLabel label = new JLabel("Client GUI");
+		//f.add(label);
+		//label.addKeyListener(this);
 		f.board.addKeyListener(this);
 		revalidate();
 	   repaint();
@@ -140,6 +136,17 @@ public class SocketClient {
 	int[] ints=(int[])gameState[0];
 	boolean[] bools=(boolean[])gameState[1];
 	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8],(int[])gameState[2],(int[])gameState[3],(int[])gameState[4],(int[])gameState[5]);
+	boolean ingame=bools[8];
+	System.out.println("ingame:"+ingame);
+	/* 
+	String xpos="";
+	for (int x : (int[])gameState[2]){
+		xpos+=x;
+		xpos+=", ";
+	}
+	System.out.println("xpos:"+ xpos);
+	*/
+	//System.out.println("ypos:"+ gameState[3]);
 	revalidate();
 	   repaint();
 
