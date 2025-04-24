@@ -24,7 +24,7 @@ public class Board extends JPanel implements ActionListener {
     private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 14;
-    private final int DELAY = 800;//changed to slow down from 140
+    private final int DELAY = 400;//changed to slow down from 140
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -331,7 +331,7 @@ public class Board extends JPanel implements ActionListener {
     //copied code from keyPressed
     //int key = e.getKeyCode();
     int keyCode=-1;
-    if(key == "space" && inGame == false){ 
+    if(key.equals("space")){ 
                 inGame = true;
                  leftDirection = false;
                  rightDirection = true;
@@ -344,35 +344,36 @@ public class Board extends JPanel implements ActionListener {
                downDirection2 = true;
 
                 initGame();
+                System.out.println("reset by pressing space");
     }
     //adjusts key event code so player 1 is arrow keys and player 2 is wasd
     if(player==1){
-    if(key=="w"){
+    if(key.equals("w")){
         keyCode=KeyEvent.VK_UP;
     }
-    if(key=="a"){
+    if(key.equals("a")){
         keyCode=KeyEvent.VK_LEFT;
     }
-    if(key=="s"){
+    if(key.equals("s")){
         keyCode=KeyEvent.VK_DOWN;
     }
-    if(key=="d"){
+    if(key.equals("d")){
         keyCode=KeyEvent.VK_RIGHT;
     }
     
     }
 
     if(player==2){
-        if(key=="w"){
+        if(key.equals("w")){
             keyCode=KeyEvent.VK_W;
         }
-        if(key=="s"){
+        if(key.equals("a")){
             keyCode=KeyEvent.VK_A;
         }
-        if(key=="a"){
+        if(key.equals("s")){
             keyCode=KeyEvent.VK_S;
         }
-        if(key=="d"){
+        if(key.equals("d")){
             keyCode=KeyEvent.VK_D;
         }
         
@@ -396,12 +397,14 @@ public class Board extends JPanel implements ActionListener {
         upDirection = true;
         rightDirection = false;
         leftDirection = false;
+
     }
 
     if ((keyCode == KeyEvent.VK_DOWN) && (!upDirection)) {
         downDirection = true;
         rightDirection = false;
         leftDirection = false;
+        //System.out.println("player 1 pressed down");
     }
 
     //wasd is for player 2
@@ -430,7 +433,7 @@ public class Board extends JPanel implements ActionListener {
             }
 
             System.out.println("key imported: "+key);
-            System.out.println("down direction: "+downDirection);
+            //System.out.println("down direction: "+downDirection);
             this.actionPerformed(null);
     }
 
@@ -448,7 +451,7 @@ public class Board extends JPanel implements ActionListener {
         repaint();
     }
     //key adapter removed becasue clients send KeyEvents to importKeyEvent method
-    //siabels so the game cant be modified through the server's snake window
+    //also so the game cant be modified through the server's snake window
     
     private class TAdapter extends KeyAdapter {
 
@@ -557,14 +560,14 @@ public class Board extends JPanel implements ActionListener {
  
 
     for (int i = 0; i < dots; i++) {
-        x[i] =xi[i];
-        y[i] =yi[i];
+        x[i]=xi[i];
+        y[i]=yi[i];
 
     }
     for (int i = 0; i < dots2; i++) {
 
-        x2[i] =xi2[i];
-        y2[i] =yi2[i];
+        x2[i]=xi2[i];
+        y2[i]=yi2[i];
     }
     }
 

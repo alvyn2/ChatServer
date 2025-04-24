@@ -66,9 +66,9 @@ public class SocketClient {
 				try {
 
 					serverMessage =(Object[]) in.readObject();
-                    if(serverMessage!=null) {
+                    if(serverMessage instanceof Object[]) {
                     	display.read((Object[])serverMessage);
-									
+
 					}
 				} catch (ClassNotFoundException e) {
 					// handles the exception
@@ -99,7 +99,7 @@ public class SocketClient {
 
 	
 	//private static final long serialVersionUID = 1L;
-    Snake f=new Snake(1);  
+    Snake f=new Snake(1);  //f for JFrame
 	//JPanel game=new JPanel();
 	//Snake s= null;
 
@@ -108,15 +108,15 @@ public class SocketClient {
 	f.setVisible(true);
     f.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	//pauses the game
-	gameState=f.exportGameState();
-	boolean[] pausedBooleans=(boolean[])gameState[1];
-	gameState[1]=pausedBooleans;
-	int[] ints=(int[])gameState[0];
-	boolean[] bools=(boolean[])gameState[1];
+	//gameState=f.exportGameState();
+	//boolean[] pausedBooleans=(boolean[])gameState[1];
+	//gameState[1]=pausedBooleans;
+	//int[] ints=(int[])gameState[0];
+	//boolean[] bools=(boolean[])gameState[1];
 	//pauses the game by setting all the direction values to false
 	//f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],false,false,false,false,false,false,false,false,bools[8]);
-	revalidate();
-	   repaint();
+	//revalidate();
+	  // repaint();
 
         //System.out.print("Gui displayed");
 		//updates the gui
@@ -154,7 +154,6 @@ public class SocketClient {
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
    public void update(){
-    //output(getName());
     revalidate();
     repaint();
    }
@@ -329,9 +328,7 @@ public void actionPerformed(ActionEvent e) {
 
         Thread rh=new RecieveHandler(socket);
             rh.start();
-            while(true){
-                display.update();
-			}
+
             //Thread.sleep(100)
         
         

@@ -32,9 +32,9 @@
             //setLocationRelativeTo(null);//sets the JFrame to the center of the screen
             setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         }
+        
         public void importkeyEvent(String e, int player) {
             board.importkeyEvent(e,player);
-            System.out.println("keyevent imported");
         }
         public void importGameState(int d,int d2,int ax,int ay,int ax2,int ay2,boolean ld,boolean rd,boolean ud,boolean dd,boolean ld2, boolean rd2 ,boolean ud2 ,boolean dd2, boolean ig,int[] xi,int[] yi,int[] xi2,int[] yi2) {
             board.importGameState(d, d2, ax, ay, ax2, ay2, ld, rd, ud, dd, ld2, rd2 , ud2 , dd2, ig,xi,yi,xi2,yi2);

@@ -55,6 +55,8 @@ public class SnakeServer {
                 idIterator++;
             	cH.start();
             	connections.add(cH);
+
+                
             }
 
         }
@@ -112,6 +114,10 @@ public class SnakeServer {
             //ex.setTitle("server snake");
             send(game.exportGameState());
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
+
+        
+            GameThread g=new GameThread(client);
+            g.start();
             while(client.isConnected()) {
 	            try {
                   
@@ -125,16 +131,22 @@ public class SnakeServer {
 	            		if(input instanceof String) {
                             
                             //System.out.println("id"+id);
-                            System.out.println("keyevent: "+input);
+                            //System.out.println("keyevent: "+input);
                             game.importkeyEvent((String)input,id);
-                           // sleep(500);
+
                             
                             for(ConnectionHandler c :connections) {
                                 synchronized(c){
                                     //System.out.println("sending"+input);
                                     //sends the gamestate of the snake gui
-                                    Object[] gameState = game.exportGameState();
+                                    try {
+                                        Object[] gameState = game.exportGameState();
                                     c.send(gameState);
+                                    }catch(Exception e) {
+                                        System.out.println("error sending message");
+                                        e.printStackTrace();
+                                    }
+                                    
                                 }
                             }
                         
@@ -158,6 +170,39 @@ public class SnakeServer {
     }
 
  
+
+
+    private static class GameThread extends Thread {
+        //public Board g=game;
+        private Socket client;
+
+        public GameThread(Socket c){
+            client=c;
+        }
+        
+        public void run(){
+            while (client.isConnected()){
+                for(ConnectionHandler c :connections) {
+                    synchronized(c){
+                        //System.out.println("sending"+input);
+                        //sends the gamestate of the snake gui
+                        Object[] gameState = game.exportGameState();
+                        c.send(gameState);
+                    }
+                }
+                try {
+                    //sleep(100);    
+                } catch (Exception e) {
+                    // TODO: handle exception
+                    e.printStackTrace();
+                    System.out.println("interrupted error in game thread");
+                }
+                
+            }
+
+        }
+
+    }
 
 }//end serverclass
 
