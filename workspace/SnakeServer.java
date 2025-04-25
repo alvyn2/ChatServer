@@ -100,11 +100,18 @@ public class SnakeServer {
             }
         //sends an object to the client
         public synchronized void send(Object output) {
+            
         	try {
+                //System.out.println("sending gamestate");
         		out.writeObject(output);
+                
         	}catch(IOException e) {
         		System.out.println("error sending message");
+                if(e instanceof EOFException || e instanceof WriteAbortedException) {
+                    System.out.println("Client disconnected: " + client.getInetAddress());
+                } else {
         		e.printStackTrace();
+                }
         	}
         }
 
@@ -112,10 +119,10 @@ public class SnakeServer {
         
    
             //ex.setTitle("server snake");
-            send(game.exportGameState());
+            send(game.exportGameState());//sends initial gamestate
+            //System.out.println("Sending initial gamestate");
             String clientAddress = client.getInetAddress().toString();// only for debugging purposes
 
-        
             GameThread g=new GameThread(client);
             g.start();
             while(client.isConnected()) {
@@ -142,6 +149,7 @@ public class SnakeServer {
                                     try {
                                         Object[] gameState = game.exportGameState();
                                     c.send(gameState);
+                                    //System.out.println("sending gamestate from ConnectionHandler");
                                     }catch(Exception e) {
                                         System.out.println("error sending message");
                                         e.printStackTrace();
@@ -171,7 +179,7 @@ public class SnakeServer {
 
  
 
-
+//thread to constantly update the client's gui while the connection thread is constantly listening for messages
     private static class GameThread extends Thread {
         //public Board g=game;
         private Socket client;
@@ -188,10 +196,12 @@ public class SnakeServer {
                         //sends the gamestate of the snake gui
                         Object[] gameState = game.exportGameState();
                         c.send(gameState);
+                        //System.out.println("sending gamestate from gameThread");
                     }
                 }
                 try {
-                    //sleep(100);    
+                    sleep(1000);    
+                    //System.out.println("sending gamestate every 1 second");
                 } catch (Exception e) {
                     // TODO: handle exception
                     e.printStackTrace();

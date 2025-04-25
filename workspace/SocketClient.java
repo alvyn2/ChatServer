@@ -59,13 +59,10 @@ public class SocketClient {
         	try {
 				final ObjectInputStream in =ins;
 				while(server.isConnected()){
-					//unpauses teh game when the server connects
-					//display.read(gameState);
-				//int recieve= in.readObject();
 				Object serverMessage=null;
 				try {
 
-					serverMessage =(Object[]) in.readObject();
+					serverMessage =in.readObject();
                     if(serverMessage instanceof Object[]) {
                     	display.read((Object[])serverMessage);
 
@@ -124,6 +121,8 @@ public class SocketClient {
 		//f.add(label);
 		//label.addKeyListener(this);
 		f.board.addKeyListener(this);
+
+		//initially displays the game
 		revalidate();
 	   repaint();
 	   
@@ -132,30 +131,32 @@ public class SocketClient {
    
 	// reads a message from the server
    public void read(Object[] gameState){
-	System.out.println("importing game state from server");
+	//System.out.println("importing game state from server");
 	int[] ints=(int[])gameState[0];
 	boolean[] bools=(boolean[])gameState[1];
 	f.importGameState(ints[0],ints[1],ints[2],ints[3],ints[4],ints[5],bools[0],bools[1],bools[2],bools[3],bools[4],bools[5],bools[6],bools[7],bools[8],(int[])gameState[2],(int[])gameState[3],(int[])gameState[4],(int[])gameState[5]);
-	boolean ingame=bools[8];
-	System.out.println("ingame:"+ingame);
-	/* 
+	//boolean ingame=bools[8];
+	//System.out.println("ingame:"+ingame);
+	
 	String xpos="";
 	for (int x : (int[])gameState[2]){
+		if(x!=0){
 		xpos+=x;
 		xpos+=", ";
+		}
 	}
 	System.out.println("xpos:"+ xpos);
-	*/
+	
 	//System.out.println("ypos:"+ gameState[3]);
 	revalidate();
 	   repaint();
 
-	//System.out.println("game displayed");
+	System.out.println("game displayed from server");
 	//g.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
    public void update(){
-    revalidate();
-    repaint();
+    //revalidate();
+    //repaint();
    }
 //key event functions
 @Override
@@ -288,7 +289,7 @@ public void mousePressed(MouseEvent e) {
 @Override
 public void mouseReleased(MouseEvent e) {
 	// TODO Auto-generated method stub
-	update();
+	//update();
 }
 @Override
 public void mouseEntered(MouseEvent e) {

@@ -24,7 +24,7 @@ public class Board extends JPanel implements ActionListener {
     private final int DOT_SIZE = 50;
     private final int ALL_DOTS = 900;
     private final int RAND_POS = 14;
-    private final int DELAY = 400;//changed to slow down from 140
+    private final int DELAY = 900;//changed to slow down from 140
 
     private final int x[] = new int[ALL_DOTS];
     private final int y[] = new int[ALL_DOTS];
@@ -344,7 +344,7 @@ public class Board extends JPanel implements ActionListener {
                downDirection2 = true;
 
                 initGame();
-                System.out.println("reset by pressing space");
+                //System.out.println("reset by pressing space");
     }
     //adjusts key event code so player 1 is arrow keys and player 2 is wasd
     if(player==1){
@@ -432,7 +432,7 @@ public class Board extends JPanel implements ActionListener {
                 leftDirection2 = false;
             }
 
-            System.out.println("key imported: "+key);
+            //System.out.println("key imported: "+key);
             //System.out.println("down direction: "+downDirection);
             this.actionPerformed(null);
     }
