@@ -53,7 +53,7 @@ public class Board extends JPanel implements ActionListener {
 
     private boolean inGame = true;
 
-    private Timer timer;
+    public Timer timer;
     private Image ball;
     private Image apple;
     private Image apple2;//extra apple
@@ -121,8 +121,8 @@ public class Board extends JPanel implements ActionListener {
         locateApple();
         locateExtraApple();//second apple so 2 players can both get apples
 
-        timer = new Timer(DELAY, this);
-        timer.start();
+        //timer = new Timer(DELAY, this);
+        //timer.start();
     }
 
     @Override

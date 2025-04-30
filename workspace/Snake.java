@@ -6,7 +6,10 @@
     import java.awt.EventQueue;
     import javax.swing.JFrame;
     import javax.swing.JPanel;
-    import java.awt.event.KeyEvent;
+import javax.swing.Timer;
+
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
     //
     public class Snake extends JFrame {
         public Board board;
@@ -23,7 +26,8 @@
             pack();
              if(t==0){
                 setTitle("Server Snake");
-                
+                board.timer = new Timer(500, (ActionListener) );
+                board.timer.start();
              }else{
                 setTitle("Client Snake");
                 setLocationRelativeTo(null);
